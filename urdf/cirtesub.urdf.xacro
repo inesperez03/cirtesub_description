@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<robot name="cirtesub" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:arg name="environment" default="sim"/>
+  <xacro:arg name="lookup_csv" default="config/t200_lookup.csv"/>
+  <xacro:arg name="stonefish_topic" default="/cirtesub/controller/thruster_setpoints_sim"/>
+  <xacro:arg name="pwm_channels" default="0,1,2,3,4,5,6,7"/>
+
+  <xacro:macro name="thruster_mount" params="link_name joint_name xyz rpy">
+    <link name="${link_name}"/>
+
+    <joint name="${joint_name}" type="fixed">
+      <parent link="cirtesub/base_link"/>
+      <child link="${link_name}"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="ros2_control_thruster_joint" params="joint_name">
+    <joint name="${joint_name}">
+      <command_interface name="effort"/>
+      <state_interface name="effort"/>
+    </joint>
+  </xacro:macro>
+
+  <link name="cirtesub/base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry>
+        <mesh filename="package://cirtesub_description/meshes/cirtesubdae.dae" scale="1 1 1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <xacro:thruster_mount
+    link_name="cirtesub/Thruster_up_front"
+    joint_name="cirtesub/Thruster_up_front"
+    xyz="0.292227 0.0 -0.151409"
+    rpy="0 -1.57 0"/>
+
+  <xacro:thruster_mount
+    link_name="cirtesub/Thruster_up_back"
+    joint_name="cirtesub/Thruster_up_back"
+    xyz="-0.249496 0.0 -0.151409"
+    rpy="0 -1.57 0"/>
+
+  <xacro:thruster_mount
+    link_name="cirtesub/Thruster_up_left"
+    joint_name="cirtesub/Thruster_up_left"
+    xyz="0.023225 -0.306067 -0.151409"
+    rpy="0 -1.57 0"/>
+
+  <xacro:thruster_mount
+    link_name="cirtesub/Thruster_up_right"
+    joint_name="cirtesub/Thruster_up_right"
+    xyz="0.023225 0.303929 -0.151409"
+    rpy="0 -1.57 0"/>
+
+  <xacro:thruster_mount
+    link_name="cirtesub/Thruster_down_backleft"
+    joint_name="cirtesub/Thruster_down_backleft"
+    xyz="-0.143453 -0.230229 -0.078257"
+    rpy="0 0.0 -0.785398"/>
+
+  <xacro:thruster_mount
+    link_name="cirtesub/Thruster_down_backright"
+    joint_name="cirtesub/Thruster_down_backright"
+    xyz="0.185331 0.228158 -0.078257"
+    rpy="0 0.0 2.35619"/>
+
+  <xacro:thruster_mount
+    link_name="cirtesub/Thruster_down_frontleft"
+    joint_name="cirtesub/Thruster_down_frontleft"
+    xyz="0.185132 -0.230229 -0.078257"
+    rpy="0 0.0 0.785398"/>
+
+  <xacro:thruster_mount
+    link_name="cirtesub/Thruster_down_frontright"
+    joint_name="cirtesub/Thruster_down_frontright"
+    xyz="-0.143453 0.228158 -0.078257"
+    rpy="0 0.0 -2.35619"/>
+
+  <ros2_control name="cirtesub_thrusters" type="system">
+    <hardware>
+      <plugin>thrusters_hardware_interface/ThrustersSystem</plugin>
+      <param name="environment">$(arg environment)</param>
+      <param name="lookup_csv">$(arg lookup_csv)</param>
+      <param name="stonefish_topic">$(arg stonefish_topic)</param>
+      <param name="pwm_channels">$(arg pwm_channels)</param>
+    </hardware>
+
+    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_up_front"/>
+    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_up_back"/>
+    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_up_left"/>
+    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_up_right"/>
+    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_down_backleft"/>
+    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_down_backright"/>
+    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_down_frontleft"/>
+    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_down_frontright"/>
+  </ros2_control>
+
+</robot>
