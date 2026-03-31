@@ -5,7 +5,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
       <geometry>
-        <mesh filename="package://cirtesub_stonefish/urdf/cirtesub_description/meshes/cirtesubdae.dae" scale="1 1 1"/>
+        <mesh filename="package://cirtesub_description/meshes/cirtesubdae.dae" scale="1 1 1"/>
       </geometry>
     </visual>
   </link>
