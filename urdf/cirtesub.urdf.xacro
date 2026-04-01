@@ -25,7 +25,7 @@
 
   <link name="cirtesub/base_link">
     <visual>
-      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <origin xyz="0 0 0" rpy="0 -1.57 0"/>
       <geometry>
         <mesh filename="package://cirtesub_description/meshes/cirtesubdae.dae" scale="1 1 1"/>
       </geometry>
@@ -35,50 +35,51 @@
   <xacro:thruster_mount
     link_name="cirtesub/Thruster_up_front"
     joint_name="cirtesub/Thruster_up_front"
-    xyz="0.292227 0.0 -0.151409"
-    rpy="0 -1.57 0"/>
+    xyz="0.27 0.0 0.0"
+    rpy="1.57 1.57 0"/>
 
   <xacro:thruster_mount
     link_name="cirtesub/Thruster_up_back"
     joint_name="cirtesub/Thruster_up_back"
-    xyz="-0.249496 0.0 -0.151409"
-    rpy="0 -1.57 0"/>
+    xyz="-0.27 0.0 0.0"
+    rpy="1.57 1.57 0.0"/>
 
   <xacro:thruster_mount
     link_name="cirtesub/Thruster_up_left"
     joint_name="cirtesub/Thruster_up_left"
-    xyz="0.023225 -0.306067 -0.151409"
-    rpy="0 -1.57 0"/>
+    xyz="0.0 -0.3 0.0"
+    rpy="1.57 1.57 0"/>
 
   <xacro:thruster_mount
     link_name="cirtesub/Thruster_up_right"
     joint_name="cirtesub/Thruster_up_right"
-    xyz="0.023225 0.303929 -0.151409"
-    rpy="0 -1.57 0"/>
+    xyz="0.0 0.30 0.0"
+    rpy="1.57 1.57 0"/>
 
   <xacro:thruster_mount
     link_name="cirtesub/Thruster_down_backleft"
     joint_name="cirtesub/Thruster_down_backleft"
-    xyz="-0.143453 -0.230229 -0.078257"
-    rpy="0 0.0 -0.785398"/>
+    xyz="-0.165 -0.23 0.076"
+    rpy="0 0.0 2.35619"/>
 
   <xacro:thruster_mount
     link_name="cirtesub/Thruster_down_backright"
     joint_name="cirtesub/Thruster_down_backright"
-    xyz="0.185331 0.228158 -0.078257"
-    rpy="0 0.0 2.35619"/>
+    xyz="-0.165 0.23 0.076"
+    rpy="0 0.0 -2.35619"/>
+    
 
   <xacro:thruster_mount
     link_name="cirtesub/Thruster_down_frontleft"
     joint_name="cirtesub/Thruster_down_frontleft"
-    xyz="0.185132 -0.230229 -0.078257"
+    xyz="0.165 -0.23 0.076"
     rpy="0 0.0 0.785398"/>
 
   <xacro:thruster_mount
     link_name="cirtesub/Thruster_down_frontright"
     joint_name="cirtesub/Thruster_down_frontright"
-    xyz="-0.143453 0.228158 -0.078257"
-    rpy="0 0.0 -2.35619"/>
+    xyz="0.165 0.23 0.076"
+    rpy="0 0.0 -0.7854"/>
 
   <ros2_control name="cirtesub_thrusters" type="system">
     <hardware>
@@ -88,7 +89,7 @@
       <param name="stonefish_topic">$(arg stonefish_topic)</param>
       <param name="pwm_channels">$(arg pwm_channels)</param>
     </hardware>
-
+    <!-- check the same order of the thrusters in stonefish -->
     <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_up_front"/>
     <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_up_back"/>
     <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_up_left"/>
