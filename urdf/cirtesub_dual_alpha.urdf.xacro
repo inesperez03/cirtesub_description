@@ -29,6 +29,16 @@
     </joint>
   </xacro:macro>
 
+  <xacro:macro name="sensor_mount" params="link_name joint_name xyz rpy">
+    <link name="${link_name}"/>
+
+    <joint name="${joint_name}" type="fixed">
+      <parent link="cirtesub/base_link"/>
+      <child link="${link_name}"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+  </xacro:macro>
+
   <xacro:macro name="ros2_control_thruster_joint" params="joint_name">
     <joint name="${joint_name}">
       <command_interface name="effort"/>
@@ -92,6 +102,30 @@
     joint_name="cirtesub/Thruster_down_frontright"
     xyz="0.165 0.23 0.076"
     rpy="0 0.0 -0.7854"/>
+
+  <xacro:sensor_mount
+    link_name="cirtesub/IMU"
+    joint_name="cirtesub/IMU_joint"
+    xyz="0.0 0.0 0.0"
+    rpy="0.0 0.0 0.0"/>
+
+  <xacro:sensor_mount
+    link_name="cirtesub/Pressure"
+    joint_name="cirtesub/Pressure_joint"
+    xyz="0.0 0.0 -0.05"
+    rpy="0.0 0.0 0.0"/>
+
+  <xacro:sensor_mount
+    link_name="cirtesub/GPS"
+    joint_name="cirtesub/GPS_joint"
+    xyz="0.0 0.0 -0.40"
+    rpy="0.0 3.1416 0.0"/>
+
+  <xacro:sensor_mount
+    link_name="cirtesub/DVL"
+    joint_name="cirtesub/DVL_joint"
+    xyz="0.0 0.0 0.15"
+    rpy="0.0 0.0 0.0"/>
 
   <xacro:alpha_urdf
     parent="cirtesub/base_link"
