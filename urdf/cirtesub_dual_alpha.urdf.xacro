@@ -127,6 +127,18 @@
     xyz="0.0 0.0 0.15"
     rpy="0.0 0.0 0.0"/>
 
+  <xacro:sensor_mount
+    link_name="cirtesub/down_camera/camera"
+    joint_name="cirtesub/down_camera/camera_joint"
+    xyz="0.0 0.0 0.15"
+    rpy="0.0 0.0 1.57"/>
+
+  <xacro:sensor_mount
+    link_name="cirtesub/front_camera/camera"
+    joint_name="cirtesub/front_camera/camera_joint"
+    xyz="0.37 0.0 0.0"
+    rpy="1.57 0.0 1.57"/>
+
   <xacro:alpha_urdf
     parent="cirtesub/base_link"
     prefix="cirtesub/alpha_left/"
