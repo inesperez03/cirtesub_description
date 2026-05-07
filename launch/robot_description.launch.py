@@ -27,7 +27,7 @@ def launch_setup(context, *args, **kwargs):
         )
 
     description_pkg = get_package_share_directory("cirtesub_description")
-    hardware_pkg = get_package_share_directory("thrusters_hardware_interface")
+    hardware_pkg = get_package_share_directory("sura_hardware_interface")
     xacro_file = os.path.join(description_pkg, "urdf", xacro_name)
     csv_file = os.path.join(hardware_pkg, "config", "t500_lookup.csv")
 

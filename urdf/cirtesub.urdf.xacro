@@ -86,7 +86,7 @@
 
   <ros2_control name="${robot_namespace}_thrusters" type="system">
     <hardware>
-      <plugin>thrusters_hardware_interface/ThrustersSystem</plugin>
+      <plugin>sura_hardware_interface/ThrustersSystem</plugin>
       <param name="environment">$(arg environment)</param>
       <param name="lookup_csv">$(arg lookup_csv)</param>
       <param name="stonefish_topic">$(arg stonefish_topic)</param>
