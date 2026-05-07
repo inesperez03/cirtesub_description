@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot name="cirtesub_dual_alpha" xmlns:xacro="http://ros.org/wiki/xacro">
 
+  <xacro:arg name="robot_namespace" default="cirtesub"/>
   <xacro:arg name="environment" default="sim"/>
   <xacro:arg name="lookup_csv" default="config/t200_lookup.csv"/>
   <xacro:arg name="stonefish_topic" default="/cirtesub/controller/thruster_setpoints_sim"/>
@@ -15,6 +16,8 @@
   <xacro:arg name="initial_positions_file" default="initial_positions.yaml"/>
   <xacro:arg name="alpha_desired_joint_states_topic" default="/cirtesub/alpha/desired_joint_states"/>
   <xacro:arg name="alpha_joint_states_topic" default="/cirtesub/alpha/joint_states"/>
+  <xacro:property name="robot_namespace" value="$(arg robot_namespace)"/>
+  <xacro:property name="robot_prefix" value="${robot_namespace}/"/>
 
   <xacro:include filename="$(find alpha_description)/xacro/alpha.urdf.xacro"/>
   <xacro:include filename="$(find alpha_description)/xacro/alpha.ros2_control.xacro"/>
@@ -23,7 +26,7 @@
     <link name="${link_name}"/>
 
     <joint name="${joint_name}" type="fixed">
-      <parent link="cirtesub/base_link"/>
+      <parent link="${robot_prefix}base_link"/>
       <child link="${link_name}"/>
       <origin xyz="${xyz}" rpy="${rpy}"/>
     </joint>
@@ -33,7 +36,7 @@
     <link name="${link_name}"/>
 
     <joint name="${joint_name}" type="fixed">
-      <parent link="cirtesub/base_link"/>
+      <parent link="${robot_prefix}base_link"/>
       <child link="${link_name}"/>
       <origin xyz="${xyz}" rpy="${rpy}"/>
     </joint>
@@ -46,7 +49,7 @@
     </joint>
   </xacro:macro>
 
-  <link name="cirtesub/base_link">
+  <link name="${robot_prefix}base_link">
     <visual>
       <origin xyz="0 0 0" rpy="0 -1.57 0"/>
       <geometry>
@@ -56,104 +59,104 @@
   </link>
 
   <xacro:thruster_mount
-    link_name="cirtesub/Thruster_up_front"
-    joint_name="cirtesub/Thruster_up_front"
+    link_name="${robot_prefix}Thruster_up_front"
+    joint_name="${robot_prefix}Thruster_up_front"
     xyz="0.27 0.0 0.0"
     rpy="1.57 1.57 0"/>
 
   <xacro:thruster_mount
-    link_name="cirtesub/Thruster_up_back"
-    joint_name="cirtesub/Thruster_up_back"
+    link_name="${robot_prefix}Thruster_up_back"
+    joint_name="${robot_prefix}Thruster_up_back"
     xyz="-0.27 0.0 0.0"
     rpy="1.57 1.57 0.0"/>
 
   <xacro:thruster_mount
-    link_name="cirtesub/Thruster_up_left"
-    joint_name="cirtesub/Thruster_up_left"
+    link_name="${robot_prefix}Thruster_up_left"
+    joint_name="${robot_prefix}Thruster_up_left"
     xyz="0.0 -0.3 0.0"
     rpy="1.57 1.57 0"/>
 
   <xacro:thruster_mount
-    link_name="cirtesub/Thruster_up_right"
-    joint_name="cirtesub/Thruster_up_right"
+    link_name="${robot_prefix}Thruster_up_right"
+    joint_name="${robot_prefix}Thruster_up_right"
     xyz="0.0 0.30 0.0"
     rpy="1.57 1.57 0"/>
 
   <xacro:thruster_mount
-    link_name="cirtesub/Thruster_down_backleft"
-    joint_name="cirtesub/Thruster_down_backleft"
+    link_name="${robot_prefix}Thruster_down_backleft"
+    joint_name="${robot_prefix}Thruster_down_backleft"
     xyz="-0.165 -0.23 0.076"
     rpy="0 0.0 2.35619"/>
 
   <xacro:thruster_mount
-    link_name="cirtesub/Thruster_down_backright"
-    joint_name="cirtesub/Thruster_down_backright"
+    link_name="${robot_prefix}Thruster_down_backright"
+    joint_name="${robot_prefix}Thruster_down_backright"
     xyz="-0.165 0.23 0.076"
     rpy="0 0.0 -2.35619"/>
 
   <xacro:thruster_mount
-    link_name="cirtesub/Thruster_down_frontleft"
-    joint_name="cirtesub/Thruster_down_frontleft"
+    link_name="${robot_prefix}Thruster_down_frontleft"
+    joint_name="${robot_prefix}Thruster_down_frontleft"
     xyz="0.165 -0.23 0.076"
     rpy="0 0.0 0.785398"/>
 
   <xacro:thruster_mount
-    link_name="cirtesub/Thruster_down_frontright"
-    joint_name="cirtesub/Thruster_down_frontright"
+    link_name="${robot_prefix}Thruster_down_frontright"
+    joint_name="${robot_prefix}Thruster_down_frontright"
     xyz="0.165 0.23 0.076"
     rpy="0 0.0 -0.7854"/>
 
   <xacro:sensor_mount
-    link_name="cirtesub/IMU"
-    joint_name="cirtesub/IMU_joint"
+    link_name="${robot_prefix}IMU"
+    joint_name="${robot_prefix}IMU_joint"
     xyz="0.0 0.0 0.0"
     rpy="0.0 0.0 0.0"/>
 
   <xacro:sensor_mount
-    link_name="cirtesub/Pressure"
-    joint_name="cirtesub/Pressure_joint"
+    link_name="${robot_prefix}Pressure"
+    joint_name="${robot_prefix}Pressure_joint"
     xyz="0.0 0.0 -0.05"
     rpy="0.0 0.0 0.0"/>
 
   <xacro:sensor_mount
-    link_name="cirtesub/GPS"
-    joint_name="cirtesub/GPS_joint"
+    link_name="${robot_prefix}GPS"
+    joint_name="${robot_prefix}GPS_joint"
     xyz="0.0 0.0 -0.40"
     rpy="0.0 0.0 0.0"/>
 
   <xacro:sensor_mount
-    link_name="cirtesub/DVL"
-    joint_name="cirtesub/DVL_joint"
+    link_name="${robot_prefix}DVL"
+    joint_name="${robot_prefix}DVL_joint"
     xyz="0.0 0.0 0.15"
     rpy="0.0 0.0 0.0"/>
 
   <xacro:sensor_mount
-    link_name="cirtesub/down_camera/camera"
-    joint_name="cirtesub/down_camera/camera_joint"
+    link_name="${robot_prefix}down_camera/camera"
+    joint_name="${robot_prefix}down_camera/camera_joint"
     xyz="0.0 0.0 0.15"
     rpy="0.0 0.0 1.57"/>
 
   <xacro:sensor_mount
-    link_name="cirtesub/front_camera/camera"
-    joint_name="cirtesub/front_camera/camera_joint"
+    link_name="${robot_prefix}front_camera/camera"
+    joint_name="${robot_prefix}front_camera/camera_joint"
     xyz="0.37 0.0 0.0"
     rpy="1.57 0.0 1.57"/>
 
   <xacro:alpha_urdf
-    parent="cirtesub/base_link"
-    prefix="cirtesub/alpha_left/"
+    parent="${robot_prefix}base_link"
+    prefix="${robot_prefix}alpha_left/"
     description_package="alpha_description">
     <origin xyz="0.335 -0.165 0.145" rpy="-1.57 0.0 0.0"/>
   </xacro:alpha_urdf>
 
   <xacro:alpha_urdf
-    parent="cirtesub/base_link"
-    prefix="cirtesub/alpha_right/"
+    parent="${robot_prefix}base_link"
+    prefix="${robot_prefix}alpha_right/"
     description_package="alpha_description">
     <origin xyz="0.335 0.165 0.145" rpy="1.57 0.0 0.0"/>
   </xacro:alpha_urdf>
 
-  <ros2_control name="cirtesub_thrusters" type="system">
+  <ros2_control name="${robot_namespace}_thrusters" type="system">
     <hardware>
       <plugin>thrusters_hardware_interface/ThrustersSystem</plugin>
       <param name="environment">$(arg environment)</param>
@@ -162,19 +165,19 @@
       <param name="pwm_channels">$(arg pwm_channels)</param>
     </hardware>
     <!-- Keep the same thruster order used by Stonefish. -->
-    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_up_front"/>
-    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_up_back"/>
-    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_up_left"/>
-    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_up_right"/>
-    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_down_backleft"/>
-    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_down_backright"/>
-    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_down_frontleft"/>
-    <xacro:ros2_control_thruster_joint joint_name="cirtesub/Thruster_down_frontright"/>
+    <xacro:ros2_control_thruster_joint joint_name="${robot_prefix}Thruster_up_front"/>
+    <xacro:ros2_control_thruster_joint joint_name="${robot_prefix}Thruster_up_back"/>
+    <xacro:ros2_control_thruster_joint joint_name="${robot_prefix}Thruster_up_left"/>
+    <xacro:ros2_control_thruster_joint joint_name="${robot_prefix}Thruster_up_right"/>
+    <xacro:ros2_control_thruster_joint joint_name="${robot_prefix}Thruster_down_backleft"/>
+    <xacro:ros2_control_thruster_joint joint_name="${robot_prefix}Thruster_down_backright"/>
+    <xacro:ros2_control_thruster_joint joint_name="${robot_prefix}Thruster_down_frontleft"/>
+    <xacro:ros2_control_thruster_joint joint_name="${robot_prefix}Thruster_down_frontright"/>
   </ros2_control>
 
   <xacro:alpha_system
-    prefix="cirtesub/alpha_left/"
-    name="cirtesub/alpha_left"
+    prefix="${robot_prefix}alpha_left/"
+    name="${robot_prefix}alpha_left"
     serial_port="$(arg alpha_left_serial_port)"
     state_update_frequency="$(arg alpha_left_state_update_frequency)"
     initial_positions_file="$(arg initial_positions_file)"
@@ -185,8 +188,8 @@
     use_fake_hardware="$(arg alpha_use_fake_hardware)"/>
 
   <xacro:alpha_system
-    prefix="cirtesub/alpha_right/"
-    name="cirtesub/alpha_right"
+    prefix="${robot_prefix}alpha_right/"
+    name="${robot_prefix}alpha_right"
     serial_port="$(arg alpha_right_serial_port)"
     state_update_frequency="$(arg alpha_right_state_update_frequency)"
     initial_positions_file="$(arg initial_positions_file)"
