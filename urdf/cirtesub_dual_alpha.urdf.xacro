@@ -6,6 +6,7 @@
   <xacro:arg name="lookup_csv" default="config/t200_lookup.csv"/>
   <xacro:arg name="stonefish_topic" default="/cirtesub/controller/thruster_setpoints_sim"/>
   <xacro:arg name="pwm_channels" default="0,1,2,3,4,5,6,7"/>
+  <xacro:arg name="pressure_offset_pa" default="101325.0"/>
 
   <xacro:arg name="use_sim" default="true"/>
   <xacro:arg name="alpha_use_fake_hardware" default="true"/>
@@ -47,6 +48,67 @@
       <command_interface name="effort"/>
       <state_interface name="effort"/>
     </joint>
+  </xacro:macro>
+
+  <xacro:macro name="ros2_control_sensor_system">
+    <ros2_control name="${robot_namespace}_sensors" type="system">
+      <hardware>
+        <plugin>sura_hardware_interface/SensorsSystem</plugin>
+        <param name="environment">$(arg environment)</param>
+        <param name="robot_namespace">${robot_namespace}</param>
+        <param name="sim_imu_topic">/${robot_namespace}/stonefish/sensors/imu</param>
+        <param name="sim_magnetometer_topic">/${robot_namespace}/stonefish/sensors/magnetometer</param>
+        <param name="sim_pressure_topic">/${robot_namespace}/stonefish/sensors/pressure</param>
+        <param name="sim_dvl_topic">/${robot_namespace}/stonefish/sensors/dvl</param>
+        <param name="sim_dvl_altitude_topic">/${robot_namespace}/stonefish/sensors/dvl/altitude</param>
+        <param name="sim_gps_topic">/${robot_namespace}/stonefish/sensors/gps</param>
+        <param name="pressure_offset_pa">$(arg pressure_offset_pa)</param>
+      </hardware>
+
+      <sensor name="imu_sensor">
+        <state_interface name="orientation.x"/>
+        <state_interface name="orientation.y"/>
+        <state_interface name="orientation.z"/>
+        <state_interface name="orientation.w"/>
+        <state_interface name="angular_velocity.x"/>
+        <state_interface name="angular_velocity.y"/>
+        <state_interface name="angular_velocity.z"/>
+        <state_interface name="linear_acceleration.x"/>
+        <state_interface name="linear_acceleration.y"/>
+        <state_interface name="linear_acceleration.z"/>
+      </sensor>
+
+      <sensor name="magnetometer_sensor">
+        <state_interface name="magnetic_field.x"/>
+        <state_interface name="magnetic_field.y"/>
+        <state_interface name="magnetic_field.z"/>
+      </sensor>
+
+      <sensor name="pressure_sensor">
+        <state_interface name="fluid_pressure"/>
+      </sensor>
+
+      <sensor name="battery_sensor">
+        <state_interface name="voltage"/>
+        <state_interface name="current"/>
+        <state_interface name="present"/>
+      </sensor>
+
+      <sensor name="dvl_sensor">
+        <state_interface name="linear_velocity.x"/>
+        <state_interface name="linear_velocity.y"/>
+        <state_interface name="linear_velocity.z"/>
+        <state_interface name="angular_velocity.x"/>
+        <state_interface name="angular_velocity.y"/>
+        <state_interface name="angular_velocity.z"/>
+        <state_interface name="distance_z"/>
+        <state_interface name="confidence"/>
+        <state_interface name="gps.latitude"/>
+        <state_interface name="gps.longitude"/>
+        <state_interface name="gps.altitude"/>
+        <state_interface name="gps.valid"/>
+      </sensor>
+    </ros2_control>
   </xacro:macro>
 
   <link name="${robot_prefix}base_link">
@@ -174,6 +236,8 @@
     <xacro:ros2_control_thruster_joint joint_name="${robot_prefix}Thruster_down_frontleft"/>
     <xacro:ros2_control_thruster_joint joint_name="${robot_prefix}Thruster_down_frontright"/>
   </ros2_control>
+
+  <xacro:ros2_control_sensor_system/>
 
   <xacro:alpha_system
     prefix="${robot_prefix}alpha_left/"
