@@ -8,6 +8,7 @@
   <xacro:arg name="pwm_channels" default="0,1,2,3,4,5,6,7"/>
   <xacro:arg name="pressure_offset_pa" default="101325.0"/>
 
+  <xacro:arg name="arms" default="dual"/>
   <xacro:arg name="use_sim" default="true"/>
   <xacro:arg name="alpha_use_fake_hardware" default="true"/>
   <xacro:arg name="alpha_left_serial_port" default=""/>
@@ -19,6 +20,7 @@
   <xacro:arg name="alpha_joint_states_topic" default="/cirtesub/alpha/joint_states"/>
   <xacro:property name="robot_namespace" value="$(arg robot_namespace)"/>
   <xacro:property name="robot_prefix" value="${robot_namespace}/"/>
+  <xacro:property name="arms" value="$(arg arms)"/>
 
   <xacro:include filename="$(find alpha_description)/xacro/alpha.urdf.xacro"/>
   <xacro:include filename="$(find alpha_description)/xacro/alpha.ros2_control.xacro"/>
@@ -211,12 +213,14 @@
     <origin xyz="0.335 -0.165 0.145" rpy="-1.57 0.0 0.0"/>
   </xacro:alpha_urdf>
 
-  <xacro:alpha_urdf
-    parent="${robot_prefix}base_link"
-    prefix="${robot_prefix}alpha_right/"
-    description_package="alpha_description">
-    <origin xyz="0.335 0.165 0.145" rpy="1.57 0.0 0.0"/>
-  </xacro:alpha_urdf>
+  <xacro:if value="${arms == 'dual'}">
+    <xacro:alpha_urdf
+      parent="${robot_prefix}base_link"
+      prefix="${robot_prefix}alpha_right/"
+      description_package="alpha_description">
+      <origin xyz="0.335 0.165 0.145" rpy="1.57 0.0 0.0"/>
+    </xacro:alpha_urdf>
+  </xacro:if>
 
   <ros2_control name="${robot_namespace}_thrusters" type="system">
     <hardware>
@@ -251,16 +255,18 @@
     use_sim="$(arg use_sim)"
     use_fake_hardware="$(arg alpha_use_fake_hardware)"/>
 
-  <xacro:alpha_system
-    prefix="${robot_prefix}alpha_right/"
-    name="${robot_prefix}alpha_right"
-    serial_port="$(arg alpha_right_serial_port)"
-    state_update_frequency="$(arg alpha_right_state_update_frequency)"
-    initial_positions_file="$(arg initial_positions_file)"
-    description_package="alpha_description"
-    desired_joint_states_topic="$(arg alpha_desired_joint_states_topic)"
-    joint_states_topic="$(arg alpha_joint_states_topic)"
-    use_sim="$(arg use_sim)"
-    use_fake_hardware="$(arg alpha_use_fake_hardware)"/>
+  <xacro:if value="${arms == 'dual'}">
+    <xacro:alpha_system
+      prefix="${robot_prefix}alpha_right/"
+      name="${robot_prefix}alpha_right"
+      serial_port="$(arg alpha_right_serial_port)"
+      state_update_frequency="$(arg alpha_right_state_update_frequency)"
+      initial_positions_file="$(arg initial_positions_file)"
+      description_package="alpha_description"
+      desired_joint_states_topic="$(arg alpha_desired_joint_states_topic)"
+      joint_states_topic="$(arg alpha_joint_states_topic)"
+      use_sim="$(arg use_sim)"
+      use_fake_hardware="$(arg alpha_use_fake_hardware)"/>
+  </xacro:if>
 
 </robot>

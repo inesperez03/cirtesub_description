@@ -1,0 +1,375 @@
+/cirtesub/controller/controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    imu_broadcaster:
+      type: sura_sensors/ImuBroadcaster
+
+    magnetometer_broadcaster:
+      type: sura_sensors/MagnetometerBroadcaster
+
+    pressure_broadcaster:
+      type: sura_sensors/PressureBroadcaster
+
+    dvl75_velocity_broadcaster:
+      type: sura_sensors/DvlVelBroadcaster
+
+    dvl75_altitude_broadcaster:
+      type: sura_sensors/Dvl75AltitudeBroadcaster
+
+    dvl75_gps_broadcaster:
+      type: sura_sensors/Dvl75GpsBroadcaster
+
+    battery_broadcaster:
+      type: sura_sensors/BatteryBroadcaster
+
+    thruster_test_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    body_force:
+      type: cirtesub_controllers/BodyForceController
+
+    state_observer:
+      type: cirtesub_controllers/StateObserverController
+
+    body_velocity:
+      type: cirtesub_controllers/BodyVelocityController
+
+    position_hold:
+      type: cirtesub_controllers/PositionHoldController
+
+    stabilize:
+      type: cirtesub_controllers/StabilizeController
+
+    depth_hold:
+      type: cirtesub_controllers/DepthHoldController
+
+    alpha_left_forward_velocity_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    alpha_left_joint_trajectory_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+/cirtesub/controller/imu_broadcaster:
+  ros__parameters:
+    sensor_name: imu_sensor
+    frame_id: cirtesub/IMU
+    topic_name: /cirtesub/sensors/imu
+
+/cirtesub/controller/magnetometer_broadcaster:
+  ros__parameters:
+    sensor_name: magnetometer_sensor
+    frame_id: cirtesub/IMU
+    topic_name: /cirtesub/sensors/magnetometer
+
+/cirtesub/controller/pressure_broadcaster:
+  ros__parameters:
+    sensor_name: pressure_sensor
+    frame_id: cirtesub/Pressure
+    topic_name: /cirtesub/sensors/pressure
+    pressure_variance: 0.0
+
+/cirtesub/controller/dvl75_velocity_broadcaster:
+  ros__parameters:
+    sensor_name: dvl_sensor
+    frame_id: cirtesub/DVL
+    topic_name: /cirtesub/sensors/dvl/twist
+    min_linear_velocity_covariance: 0.01
+    max_linear_velocity_covariance: 999.0
+    angular_velocity_covariance: 99999.0
+
+/cirtesub/controller/dvl75_altitude_broadcaster:
+  ros__parameters:
+    sensor_name: dvl_sensor
+    frame_id: cirtesub/DVL
+    topic_name: /cirtesub/sensors/dvl/altitude
+    field_of_view: 0.785398
+    min_range: 0.05
+    max_range: 50.0
+
+/cirtesub/controller/dvl75_gps_broadcaster:
+  ros__parameters:
+    sensor_name: dvl_sensor
+    frame_id: cirtesub/GPS
+    topic_name: /cirtesub/sensors/gps
+    position_covariance: 0.0
+
+/cirtesub/controller/battery_broadcaster:
+  ros__parameters:
+    sensor_name: battery_sensor
+    frame_id: cirtesub/base_link
+    topic_name: /cirtesub/sensors/battery
+
+/cirtesub/controller/thruster_test_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/Thruster_up_front
+      - cirtesub/Thruster_up_back
+      - cirtesub/Thruster_up_left
+      - cirtesub/Thruster_up_right
+      - cirtesub/Thruster_down_backleft
+      - cirtesub/Thruster_down_backright
+      - cirtesub/Thruster_down_frontleft
+      - cirtesub/Thruster_down_frontright
+    interface_name: effort
+
+/cirtesub/controller/body_force:
+  ros__parameters:
+    input_topic: /cirtesub/controller/body_force/command
+    debug.enabled: true
+
+/cirtesub/controller/state_observer:
+  ros__parameters:
+    mode: learn
+    navigator_topic: /cirtesub/navigator/navigation
+    force_topic: /cirtesub/controller/body_force/command
+    predicted_pose_topic: /cirtesub/controller/state_observer/predicted_pose
+    predicted_odometry_topic: /cirtesub/controller/state_observer/predicted_odometry
+    model_topic: /cirtesub/controller/state_observer/model
+    freeze_service_name: /cirtesub/controller/state_observer/freeze
+    reset_service_name: /cirtesub/controller/state_observer/reset
+    save_service_name: /cirtesub/controller/state_observer/save
+    load_service_name: /cirtesub/controller/state_observer/load
+    set_learning_service_name: /cirtesub/controller/state_observer/set_learning
+    world_frame_id: world_ned
+    base_frame_id: cirtesub/base_link
+    model_file: /tmp/cirtesub_state_observer_model.yaml
+    navigator_timeout: 0.5
+    force_timeout: 0.5
+    forgetting_factor: 0.995
+    min_excitation: 0.001
+    initial_estimator_covariance: 1000.0
+    model_publish_period: 1.0
+    max_prediction_dt: 0.1
+    weight: 112.8
+    buoyancy: 114.8
+    rigid_body_inertia: [11.5, 11.5, 11.5, 0.16, 0.16, 0.16]
+    effective_inertia: [17.0, 24.2, 26.07, 0.28, 0.28, 0.28]
+    linear_damping: [4.03, 6.22, 5.18, 0.07, 0.07, 0.07]
+    quadratic_damping: [18.18, 21.66, 36.99, 1.55, 1.55, 1.55]
+    navigation_pose_covariance: [0.02, 0.02, 0.02, 0.01, 0.01, 0.01]
+    process_noise: [0.02, 0.02, 0.02, 0.01, 0.01, 0.01]
+
+/cirtesub/controller/body_velocity:
+  ros__parameters:
+    debug.enabled: true
+    setpoint_topic: /cirtesub/controller/body_velocity/setpoint
+    navigator_topic: /cirtesub/navigator/navigation
+    feedforward_topic: /cirtesub/controller/depth_hold/feedforward
+    body_force_controller_name: body_force
+
+    kp_x: 100.0
+    ki_x: 50.0
+    kd_x: 0.0
+    antiwindup_x: 10.0
+
+    kp_y: 100.0
+    ki_y: 50.0
+    kd_y: 0.0
+    antiwindup_y: 10.0
+
+    kp_z: 800.0
+    ki_z: 400.0
+    kd_z: 0.0
+    antiwindup_z: 10.0
+
+    kp_roll: 100.0
+    ki_roll: 50.0
+    kd_roll: 0.0
+    antiwindup_roll: 10.0
+
+    kp_pitch: 100.0
+    ki_pitch: 50.0
+    kd_pitch: 0.0
+    antiwindup_pitch: 10.0
+
+    kp_yaw: 15.0
+    ki_yaw: 8.0
+    kd_yaw: 0.0
+    antiwindup_yaw: 10.0
+
+/cirtesub/controller/position_hold:
+  ros__parameters:
+    debug.enabled: true
+    setpoint_topic: /cirtesub/controller/position_hold/setpoint
+    feedforward_topic: /cirtesub/controller/position_hold/feedforward
+    navigator_topic: /cirtesub/navigator/navigation
+    body_velocity_controller_name: body_velocity
+    setpoint_frame_id: world_ned
+
+    kp_x: 1.0
+    ki_x: 0.0
+    kd_x: 0.0
+    antiwindup_x: 1.0
+
+    kp_y: 1.0
+    ki_y: 0.0
+    kd_y: 0.0
+    antiwindup_y: 1.0
+
+    kp_z: 1.0
+    ki_z: 0.0
+    kd_z: 0.0
+    antiwindup_z: 1.0
+
+    kp_roll: 1.0
+    ki_roll: 0.0
+    kd_roll: 0.0
+    antiwindup_roll: 1.0
+
+    kp_pitch: 1.0
+    ki_pitch: 0.0
+    kd_pitch: 0.0
+    antiwindup_pitch: 1.0
+
+    kp_yaw: 1.0
+    ki_yaw: 0.0
+    kd_yaw: 0.0
+    antiwindup_yaw: 1.0
+
+    linear_feedforward_threshold: 0.001
+    angular_feedforward_threshold: 0.001
+    feedforward_timeout: 0.25
+
+/cirtesub/controller/stabilize:
+  ros__parameters:
+    debug.enabled: true
+    feedforward_topic: /cirtesub/controller/stabilize/feedforward
+    navigator_topic: /cirtesub/navigator/navigation
+    body_force_controller_name: body_force
+    enable_roll_pitch_service_name: /cirtesub/controller/stabilize/enable_roll_pitch
+    disable_roll_pitch_service_name: /cirtesub/controller/stabilize/disable_roll_pitch
+    allow_roll_pitch: false
+    feedforward_gain_x: 1.0
+    feedforward_gain_y: 1.0
+    feedforward_gain_z: 1.0
+    feedforward_gain_roll: 1.0
+    feedforward_gain_pitch: 1.0
+    feedforward_gain_yaw: 1.0
+
+    kp_roll: 50.0
+    ki_roll: 40.0
+    kd_roll: 40.0
+    antiwindup_roll: 10.0
+
+    kp_pitch: 50.0
+    ki_pitch: 40.0
+    kd_pitch: 40.0
+    antiwindup_pitch: 10.0
+
+    kp_yaw: 10.0
+    ki_yaw: 2.0
+    kd_yaw: 6.0
+    antiwindup_yaw: 10.0
+
+    yaw_command_threshold: 0.001
+    roll_command_threshold: 0.001
+    pitch_command_threshold: 0.001
+
+/cirtesub/controller/depth_hold:
+  ros__parameters:
+    debug.enabled: true
+    feedforward_topic: /cirtesub/controller/depth_hold/feedforward
+    navigator_topic: /cirtesub/navigator/navigation
+    setpoint_topic: /cirtesub/controller/depth_hold/set_point
+    body_force_controller_name: body_force
+    enable_roll_pitch_service_name: /cirtesub/controller/depth_hold/enable_roll_pitch
+    disable_roll_pitch_service_name: /cirtesub/controller/depth_hold/disable_roll_pitch
+    allow_roll_pitch: false
+    feedforward_gain_x: 1.0
+    feedforward_gain_y: 1.0
+    feedforward_gain_z: 1.0
+    feedforward_gain_roll: 1.0
+    feedforward_gain_pitch: 1.0
+    feedforward_gain_yaw: 1.0
+
+    kp_roll: 50.0
+    ki_roll: 40.0
+    kd_roll: 40.0
+    antiwindup_roll: 10.0
+
+    kp_pitch: 50.0
+    ki_pitch: 40.0
+    kd_pitch: 40.0
+    antiwindup_pitch: 10.0
+
+    kp_yaw: 10.0
+    ki_yaw: 2.0
+    kd_yaw: 6.0
+    antiwindup_yaw: 10.0
+
+    kp_depth: 400.0
+    ki_depth: 100.0
+    kd_depth: 400.0
+    antiwindup_depth: 10.0
+
+    command_threshold: 0.001
+    depth_command_threshold: 0.001
+
+/cirtesub/controller/alpha_left_forward_velocity_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/alpha_left/axis_a
+      - cirtesub/alpha_left/axis_b
+      - cirtesub/alpha_left/axis_c
+      - cirtesub/alpha_left/axis_d
+      - cirtesub/alpha_left/axis_e
+    interface_name: velocity
+
+/cirtesub/controller/alpha_left_joint_trajectory_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/alpha_left/axis_a
+      - cirtesub/alpha_left/axis_b
+      - cirtesub/alpha_left/axis_c
+      - cirtesub/alpha_left/axis_d
+      - cirtesub/alpha_left/axis_e
+    command_interfaces:
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+    state_publish_rate: 40.0
+    command_publish_rate: 40.0
+    allow_nonzero_velocity_at_trajectory_end: false
+    interpolation_method: splines
+    gains:
+      cirtesub/alpha_left/axis_a:
+        p: 0.5
+        i: 0.0
+        d: 0.0
+        i_clamp_min: -1.0
+        i_clamp_max: 1.0
+        ff_velocity_scale: 1.0
+      cirtesub/alpha_left/axis_b:
+        p: 0.5
+        i: 0.0
+        d: 0.0
+        i_clamp_min: -1.0
+        i_clamp_max: 1.0
+        ff_velocity_scale: 1.0
+      cirtesub/alpha_left/axis_c:
+        p: 0.5
+        i: 0.0
+        d: 0.0
+        i_clamp_min: -1.0
+        i_clamp_max: 1.0
+        ff_velocity_scale: 1.0
+      cirtesub/alpha_left/axis_d:
+        p: 0.5
+        i: 0.0
+        d: 0.0
+        i_clamp_min: -1.0
+        i_clamp_max: 1.0
+        ff_velocity_scale: 1.0
+      cirtesub/alpha_left/axis_e:
+        p: 0.5
+        i: 0.0
+        d: 0.0
+        i_clamp_min: -1.0
+        i_clamp_max: 1.0
+        ff_velocity_scale: 1.0
+

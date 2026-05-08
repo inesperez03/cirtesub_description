@@ -7,19 +7,40 @@ from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.actions import Node
 
 
+ROBOT_VARIANT_TO_ARMS = {
+    "dual_alpha": "dual",
+    "single_alpha": "single",
+    "auv": "auv",
+}
+
+
+def resolve_arms(arms, robot_variant):
+    if arms:
+        if arms not in ("dual", "single", "auv"):
+            raise RuntimeError(
+                "Unsupported arms '{}'. Use 'dual', 'single' or 'auv'.".format(arms)
+            )
+        return arms
+
+    if robot_variant not in ROBOT_VARIANT_TO_ARMS:
+        raise RuntimeError(
+            "Unsupported robot_variant '{}'. Use 'dual_alpha', 'single_alpha' or 'auv'.".format(
+                robot_variant
+            )
+        )
+    return ROBOT_VARIANT_TO_ARMS[robot_variant]
+
+
 def launch_setup(context, *args, **kwargs):
     robot_namespace = LaunchConfiguration("robot_namespace").perform(context).strip("/")
     robot_variant = LaunchConfiguration("robot_variant").perform(context)
+    arms = resolve_arms(LaunchConfiguration("arms").perform(context), robot_variant)
     environment = LaunchConfiguration("environment").perform(context)
 
-    if robot_variant == "dual_alpha":
+    if arms in ("dual", "single"):
         xacro_name = "cirtesub_dual_alpha.urdf.xacro"
-    elif robot_variant == "auv":
+    elif arms == "auv":
         xacro_name = "cirtesub.urdf.xacro"
-    else:
-        raise RuntimeError(
-            f"Unsupported robot_variant '{robot_variant}'. Use 'dual_alpha' or 'auv'."
-        )
 
     if environment not in ("sim", "real"):
         raise RuntimeError(
@@ -45,30 +66,32 @@ def launch_setup(context, *args, **kwargs):
         "/controller/thruster_setpoints_sim",
     ]
 
-    if robot_variant == "dual_alpha":
+    if arms in ("dual", "single"):
         alpha_use_sim = "true" if environment == "sim" else "false"
         xacro_command.extend(
             [
+                " arms:=",
+                arms,
                 " use_sim:=",
                 alpha_use_sim,
-            " alpha_use_fake_hardware:=",
-            LaunchConfiguration("alpha_use_fake_hardware"),
-            " alpha_left_serial_port:=",
-            LaunchConfiguration("alpha_left_serial_port"),
-            " alpha_right_serial_port:=",
-            LaunchConfiguration("alpha_right_serial_port"),
-            " alpha_left_state_update_frequency:=",
-            LaunchConfiguration("alpha_left_state_update_frequency"),
-            " alpha_right_state_update_frequency:=",
-            LaunchConfiguration("alpha_right_state_update_frequency"),
-            " initial_positions_file:=",
-            LaunchConfiguration("initial_positions_file"),
-            " alpha_desired_joint_states_topic:=/",
-            robot_namespace,
-            "/alpha/desired_joint_states",
-            " alpha_joint_states_topic:=/",
-            robot_namespace,
-            "/alpha/joint_states",
+                " alpha_use_fake_hardware:=",
+                LaunchConfiguration("alpha_use_fake_hardware"),
+                " alpha_left_serial_port:=",
+                LaunchConfiguration("alpha_left_serial_port"),
+                " alpha_right_serial_port:=",
+                LaunchConfiguration("alpha_right_serial_port"),
+                " alpha_left_state_update_frequency:=",
+                LaunchConfiguration("alpha_left_state_update_frequency"),
+                " alpha_right_state_update_frequency:=",
+                LaunchConfiguration("alpha_right_state_update_frequency"),
+                " initial_positions_file:=",
+                LaunchConfiguration("initial_positions_file"),
+                " alpha_desired_joint_states_topic:=/",
+                robot_namespace,
+                "/alpha/desired_joint_states",
+                " alpha_joint_states_topic:=/",
+                robot_namespace,
+                "/alpha/joint_states",
             ]
         )
 
@@ -95,6 +118,7 @@ def generate_launch_description():
         [
             DeclareLaunchArgument("robot_namespace", default_value="sura"),
             DeclareLaunchArgument("robot_variant", default_value="dual_alpha"),
+            DeclareLaunchArgument("arms", default_value=""),
             DeclareLaunchArgument("environment", default_value="sim"),
             DeclareLaunchArgument("alpha_use_fake_hardware", default_value="true"),
             DeclareLaunchArgument("alpha_left_serial_port", default_value=""),
