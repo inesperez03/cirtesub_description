@@ -30,22 +30,25 @@
       type: forward_command_controller/ForwardCommandController
 
     body_force:
-      type: cirtesub_controllers/BodyForceController
+      type: sura_controllers/common/BodyForceController
+
+    mpc_4dof:
+      type: sura_controllers/auv/Mpc4dofController
 
     state_observer:
-      type: cirtesub_controllers/StateObserverController
+      type: sura_controllers/auv/StateObserverController
 
     body_velocity:
-      type: cirtesub_controllers/BodyVelocityController
+      type: sura_controllers/auv/BodyVelocityController
 
     position_hold:
-      type: cirtesub_controllers/PositionHoldController
+      type: sura_controllers/auv/PositionHoldController
 
     stabilize:
-      type: cirtesub_controllers/StabilizeController
+      type: sura_controllers/auv/StabilizeController
 
     depth_hold:
-      type: cirtesub_controllers/DepthHoldController
+      type: sura_controllers/auv/DepthHoldController
 
     alpha_left_forward_velocity_controller:
       type: forward_command_controller/ForwardCommandController
@@ -130,11 +133,43 @@
     input_topic: /cirtesub/controller/body_force/command
     debug.enabled: true
 
+/cirtesub/controller/mpc_4dof:
+  ros__parameters:
+    navigator_topic: /cirtesub/navigator/navigation
+    setpoint_topic: /cirtesub/controller/mpc_4dof/setpoint
+    body_force_controller_name: body_force
+    world_frame_id: world_ned
+    base_frame_id: cirtesub/base_link
+    mpc_control_axes: [true, true, true, true]
+    prediction_horizon: 10
+    prediction_dt: 0.05
+    mpc_rate: 20.0
+    q_state: [5.0, 5.0, 10.0, 4.0, 0.5, 0.5, 1.0, 0.4]
+    r_input: [0.05, 0.05, 0.05, 0.03]
+    s_delta_input: [0.2, 0.2, 0.2, 0.1]
+    terminal_weight_scale: 5.0
+    wrench_min: [-40.0, -40.0, -40.0, -8.0]
+    wrench_max: [40.0, 40.0, 40.0, 8.0]
+    wrench_rate_limit: [5.0, 5.0, 5.0, 1.0]
+    navigator_timeout: 0.5
+    setpoint_timeout: 1.0
+    solver_max_iterations: 50
+    solver_time_limit_ms: 8.0
+    fallback_mode: hold_previous
+    inertia: [34.251703315309271, 30.281425034813839, 72.430134836069982, 1.3741204484094345]
+    linear_damping: [24.107954877335946, 5.4837328317398066, 16.65150248083032, 2.783423461826271]
+    quadratic_damping: [61.694361554220883, 76.624321149744574, 97.902970331563381, 6.7492787958329963]
+    static_wrench: [0.17911698994065414, 0.0067311685486561006, 1.4065236121491025, -0.0019118518062424641]
+    restoring_z: 0.0
+
 /cirtesub/controller/state_observer:
   ros__parameters:
     mode: learn
     navigator_topic: /cirtesub/navigator/navigation
-    force_topic: /cirtesub/controller/body_force/command
+    force_topic: /cirtesub/controller/body_force/wrench
+    imu_topic: /cirtesub/sensors/imu
+    aruco_pose_topic: /cirtesub/sensors/aruco/pose_enu
+    depth_pose_topic: /cirtesub/sensors/pressure/pose
     predicted_pose_topic: /cirtesub/controller/state_observer/predicted_pose
     predicted_odometry_topic: /cirtesub/controller/state_observer/predicted_odometry
     model_topic: /cirtesub/controller/state_observer/model
@@ -142,26 +177,39 @@
     reset_service_name: /cirtesub/controller/state_observer/reset
     save_service_name: /cirtesub/controller/state_observer/save
     load_service_name: /cirtesub/controller/state_observer/load
-    set_learning_service_name: /cirtesub/controller/state_observer/set_learning
+    learn_service_name: /cirtesub/controller/state_observer/learn
+    predict_service_name: /cirtesub/controller/state_observer/predict
     world_frame_id: world_ned
     base_frame_id: cirtesub/base_link
-    model_file: /tmp/cirtesub_state_observer_model.yaml
+    model_file: /home/cirtesu/cirtesub_ws/src/cirtesub_description/config/cirtesub_state_observer_model.yaml
     navigator_timeout: 0.5
     force_timeout: 0.5
-    forgetting_factor: 0.995
+    imu_timeout: 0.5
+    aruco_pose_timeout: 0.5
+    depth_pose_timeout: 0.5
+    forgetting_factor: 0.9995
     min_excitation: 0.001
-    initial_estimator_covariance: 1000.0
+    initial_estimator_covariance: 10.0
     model_publish_period: 1.0
     max_prediction_dt: 0.1
+    use_imu_linear_acceleration: false
     weight: 112.8
     buoyancy: 114.8
     rigid_body_inertia: [11.5, 11.5, 11.5, 0.16, 0.16, 0.16]
     effective_inertia: [17.0, 24.2, 26.07, 0.28, 0.28, 0.28]
     linear_damping: [4.03, 6.22, 5.18, 0.07, 0.07, 0.07]
     quadratic_damping: [18.18, 21.66, 36.99, 1.55, 1.55, 1.55]
+    static_wrench: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     navigation_pose_covariance: [0.02, 0.02, 0.02, 0.01, 0.01, 0.01]
     process_noise: [0.02, 0.02, 0.02, 0.01, 0.01, 0.01]
+    navigation_feedback_axes: [false, false, true, false, false, false]
+    max_effective_inertia: 200.0
+    max_linear_damping: 100.0
+    max_quadratic_damping: 300.0
+    min_static_wrench: -200.0
+    max_static_wrench: 200.0
 
+# TODO: claim interfaces and do not just send a wrench command to the depth_hold_controller. 
 /cirtesub/controller/body_velocity:
   ros__parameters:
     debug.enabled: true
@@ -258,6 +306,7 @@
     feedforward_gain_roll: 1.0
     feedforward_gain_pitch: 1.0
     feedforward_gain_yaw: 1.0
+    depth_bias_force: 0.0
 
     kp_roll: 50.0
     ki_roll: 40.0
@@ -313,6 +362,7 @@
     kp_depth: 400.0
     ki_depth: 100.0
     kd_depth: 400.0
+    depth_bias_force: 30.0
     antiwindup_depth: 10.0
 
     command_threshold: 0.001
@@ -331,7 +381,7 @@
 /cirtesub/controller/alpha_right_forward_velocity_controller:
   ros__parameters:
     joints:
-      - cirtesub/alpha_right/axis_a
+      - cirtesub/alpha_left/axis_a
       - cirtesub/alpha_right/axis_b
       - cirtesub/alpha_right/axis_c
       - cirtesub/alpha_right/axis_d
@@ -356,13 +406,6 @@
     allow_nonzero_velocity_at_trajectory_end: false
     interpolation_method: splines
     gains:
-      cirtesub/alpha_left/axis_a:
-        p: 0.5
-        i: 0.0
-        d: 0.0
-        i_clamp_min: -1.0
-        i_clamp_max: 1.0
-        ff_velocity_scale: 1.0
       cirtesub/alpha_left/axis_b:
         p: 0.5
         i: 0.0
@@ -410,13 +453,6 @@
     allow_nonzero_velocity_at_trajectory_end: false
     interpolation_method: splines
     gains:
-      cirtesub/alpha_right/axis_a:
-        p: 0.5
-        i: 0.0
-        d: 0.0
-        i_clamp_min: -1.0
-        i_clamp_max: 1.0
-        ff_velocity_scale: 1.0
       cirtesub/alpha_right/axis_b:
         p: 0.5
         i: 0.0

@@ -8,6 +8,12 @@
         <mesh filename="package://cirtesub_description/meshes/cirtesubdae.dae" scale="1 1 1"/>
       </geometry>
     </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 1.57"/>
+      <geometry>
+        <mesh filename="package://cirtesub_description/meshes/cirtesubdae_colisions.dae" scale="1 1 1"/>
+      </geometry>
+    </collision>
   </link>
 
   <link name="cirtesub/Thruster_up_front"/>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="cirtesub" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="robot_name" default="cirtesub"/>
+  <xacro:property name="robot" value="$(arg robot_name)"/>
+
+  <group name="alpha_left">
+    <link name="${robot}/alpha_left/ee_base_link"/>
+    <joint name="${robot}/alpha_left/axis_b"/>
+    <joint name="${robot}/alpha_left/axis_c"/>
+    <joint name="${robot}/alpha_left/axis_d"/>
+    <joint name="${robot}/alpha_left/axis_e"/>
+  </group>
+
+  <group name="alpha_right">
+    <link name="${robot}/alpha_right/ee_base_link"/>
+    <joint name="${robot}/alpha_right/axis_b"/>
+    <joint name="${robot}/alpha_right/axis_c"/>
+    <joint name="${robot}/alpha_right/axis_d"/>
+    <joint name="${robot}/alpha_right/axis_e"/>
+  </group>
+
+  <group name="dual_alpha">
+    <group name="alpha_left"/>
+    <group name="alpha_right"/>
+  </group>
+
+  <group_state name="home" group="alpha_left">
+    <joint name="${robot}/alpha_left/axis_b" value="0"/>
+    <joint name="${robot}/alpha_left/axis_c" value="0.08"/>
+    <joint name="${robot}/alpha_left/axis_d" value="1.5746"/>
+    <joint name="${robot}/alpha_left/axis_e" value="0"/>
+  </group_state>
+
+  <group_state name="home" group="alpha_right">
+    <joint name="${robot}/alpha_right/axis_b" value="0"/>
+    <joint name="${robot}/alpha_right/axis_c" value="0.08"/>
+    <joint name="${robot}/alpha_right/axis_d" value="1.5746"/>
+    <joint name="${robot}/alpha_right/axis_e" value="0"/>
+  </group_state>
+
+  <passive_joint name="${robot}/alpha_left/standard_jaws_rs1_130_joint"/>
+  <passive_joint name="${robot}/alpha_left/standard_jaws_rs1_139_joint"/>
+  <passive_joint name="${robot}/alpha_right/standard_jaws_rs1_130_joint"/>
+  <passive_joint name="${robot}/alpha_right/standard_jaws_rs1_139_joint"/>
+
+  <xacro:macro name="alpha_disabled_collisions" params="prefix">
+    <disable_collisions link1="${prefix}m1_link" link2="${prefix}m2_1_2_link" reason="Adjacent"/>
+    <disable_collisions link1="${prefix}m1_link" link2="${prefix}m2_joint_link" reason="Default"/>
+    <disable_collisions link1="${prefix}m1_link" link2="${prefix}m3_inline_link" reason="Default"/>
+    <disable_collisions link1="${prefix}m1_link" link2="${prefix}standard_jaws_base_link" reason="Adjacent"/>
+    <disable_collisions link1="${prefix}m1_link" link2="${prefix}standard_jaws_rs1_130_link" reason="Never"/>
+    <disable_collisions link1="${prefix}m1_link" link2="${prefix}standard_jaws_rs1_139_link" reason="Never"/>
+    <disable_collisions link1="${prefix}m2_1_1_link" link2="${prefix}m2_1_2_link" reason="Never"/>
+    <disable_collisions link1="${prefix}m2_1_1_link" link2="${prefix}m2_joint_link" reason="Adjacent"/>
+    <disable_collisions link1="${prefix}m2_1_1_link" link2="${prefix}m3_inline_link" reason="Adjacent"/>
+    <disable_collisions link1="${prefix}m2_1_2_link" link2="${prefix}m2_joint_link" reason="Adjacent"/>
+    <disable_collisions link1="${prefix}m2_1_2_link" link2="${prefix}standard_jaws_base_link" reason="Never"/>
+    <disable_collisions link1="${prefix}m2_1_2_link" link2="${prefix}standard_jaws_rs1_130_link" reason="Never"/>
+    <disable_collisions link1="${prefix}m2_1_2_link" link2="${prefix}standard_jaws_rs1_139_link" reason="Never"/>
+    <disable_collisions link1="${prefix}m2_joint_link" link2="${prefix}m3_inline_link" reason="Default"/>
+    <disable_collisions link1="${prefix}m2_joint_link" link2="${prefix}standard_jaws_base_link" reason="Never"/>
+    <disable_collisions link1="${prefix}m2_joint_link" link2="${prefix}standard_jaws_rs1_130_link" reason="Default"/>
+    <disable_collisions link1="${prefix}standard_jaws_base_link" link2="${prefix}standard_jaws_rs1_130_link" reason="Adjacent"/>
+    <disable_collisions link1="${prefix}standard_jaws_base_link" link2="${prefix}standard_jaws_rs1_139_link" reason="Adjacent"/>
+    <disable_collisions link1="${prefix}standard_jaws_rs1_130_link" link2="${prefix}standard_jaws_rs1_139_link" reason="Default"/>
+  </xacro:macro>
+
+  <xacro:alpha_disabled_collisions prefix="${robot}/alpha_left/"/>
+  <xacro:alpha_disabled_collisions prefix="${robot}/alpha_right/"/>
+  <disable_collisions link1="${robot}/alpha_left/m3_inline_link" link2="${robot}/base_link" reason="Adjacent"/>
+  <disable_collisions link1="${robot}/alpha_right/m3_inline_link" link2="${robot}/base_link" reason="Adjacent"/>
+
+</robot>
