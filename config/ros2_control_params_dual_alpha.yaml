@@ -381,7 +381,7 @@
 /cirtesub/controller/alpha_right_forward_velocity_controller:
   ros__parameters:
     joints:
-      - cirtesub/alpha_left/axis_a
+      - cirtesub/alpha_right/axis_a
       - cirtesub/alpha_right/axis_b
       - cirtesub/alpha_right/axis_c
       - cirtesub/alpha_right/axis_d

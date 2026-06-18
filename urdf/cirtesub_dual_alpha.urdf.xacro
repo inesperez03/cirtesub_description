@@ -16,7 +16,8 @@
   <xacro:arg name="alpha_right_state_update_frequency" default="250"/>
   <xacro:arg name="initial_positions_file" default="initial_positions.yaml"/>
   <xacro:arg name="alpha_desired_joint_states_topic" default="/cirtesub/alpha/desired_joint_states"/>
-  <xacro:arg name="alpha_joint_states_topic" default="/cirtesub/alpha/joint_states"/>
+  <xacro:arg name="alpha_joint_states_topic" default="/cirtesub/stonefish/alpha/joint_states"/>
+  <xacro:arg name="alpha_normalized_joint_states_topic" default="/cirtesub/alpha/joint_states"/>
 
   <xacro:property name="arms" value="$(arg arms)"/>
 
@@ -159,7 +160,7 @@
     parent="$(arg robot_name)/base_link"
     prefix="$(arg robot_name)/alpha_left/"
     description_package="alpha_description">
-    <origin xyz="0.335 -0.165 0.145" rpy="-1.57 0.0 0.0"/>
+    <origin xyz="0.335 -0.165 0.145" rpy="0.0 0.0 0.0"/>
   </xacro:alpha_urdf>
 
   <xacro:if value="${arms == 'dual'}">
@@ -167,7 +168,7 @@
       parent="$(arg robot_name)/base_link"
       prefix="$(arg robot_name)/alpha_right/"
       description_package="alpha_description">
-      <origin xyz="0.335 0.165 0.145" rpy="1.57 0.0 0.0"/>
+      <origin xyz="0.335 0.165 0.145" rpy="0.0 0.0 0.0"/>
     </xacro:alpha_urdf>
   </xacro:if>
 
@@ -381,6 +382,7 @@
     description_package="alpha_description"
     desired_joint_states_topic="$(arg alpha_desired_joint_states_topic)"
     joint_states_topic="$(arg alpha_joint_states_topic)"
+    normalized_joint_states_topic="$(arg alpha_normalized_joint_states_topic)"
     use_sim="$(arg use_sim)"
     use_fake_hardware="$(arg alpha_use_fake_hardware)"/>
 
@@ -394,6 +396,7 @@
       description_package="alpha_description"
       desired_joint_states_topic="$(arg alpha_desired_joint_states_topic)"
       joint_states_topic="$(arg alpha_joint_states_topic)"
+      normalized_joint_states_topic="$(arg alpha_normalized_joint_states_topic)"
       use_sim="$(arg use_sim)"
       use_fake_hardware="$(arg alpha_use_fake_hardware)"/>
   </xacro:if>
