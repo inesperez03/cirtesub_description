@@ -1,0 +1,46 @@
+robot:
+  name: cirtesub
+  environment: sim
+  localization: sim
+
+description:
+  package: cirtesub_description
+  xacro: urdf/cirtesub_dual_alpha.urdf.xacro
+  arms: dual
+  # xacro: urdf/cirtesub.urdf.xacro
+
+ros2_control:
+  params_package: cirtesub_description
+  params: config/ros2_control_params_dual_alpha.yaml
+
+diagnostics:
+  params_package: sura_diagnostics
+  params: config/cirtesub_diagnostics.yaml
+
+cameras:
+  down_camera:
+    enabled: true
+    aruco: true
+  front_camera:
+    enabled: false
+    aruco: false
+  right_camera:
+    enabled: false
+    aruco: false
+
+imu:
+  raw_imu_topic: controller/imu_broadcaster/imu
+  filtered_imu_topic: imu/sim_relay
+  mag_topic: controller/magnetometer_broadcaster/mag
+
+localization:
+  launch_package: sura_localization
+  launch_file: cirtesu_auv_localization.launch.py
+  publish_tf: true
+  datum:
+    # latitude: 39.994335199497364
+    # longitude: -0.07400607762331379
+    # heading: 0.0
+    latitude: 39.9944
+    longitude: -0.0741
+    heading: 0.0
