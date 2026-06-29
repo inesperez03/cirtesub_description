@@ -53,6 +53,9 @@
     alpha_left_forward_velocity_controller:
       type: forward_command_controller/ForwardCommandController
 
+    alpha_left_cartesian_velocity_controller:
+      type: sura_controllers/uvms/AlphaCartesianVelocityController
+
     alpha_left_joint_trajectory_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
@@ -362,6 +365,28 @@
       - cirtesub/alpha_left/axis_d
       - cirtesub/alpha_left/axis_e
     interface_name: velocity
+
+/cirtesub/controller/alpha_left_cartesian_velocity_controller:
+  ros__parameters:
+    command_topic: /cirtesub/controller/alpha_left_cartesian_velocity_controller/twist
+    robot_description_source_node: /robot_state_publisher_cirtesub
+    base_frame: cirtesub/alpha_left/base_link
+    tip_frame: cirtesub/alpha_left/standard_jaws_tool
+    joints:
+      - cirtesub/alpha_left/axis_a
+      - cirtesub/alpha_left/axis_b
+      - cirtesub/alpha_left/axis_c
+      - cirtesub/alpha_left/axis_d
+      - cirtesub/alpha_left/axis_e
+    ik_joints:
+      - cirtesub/alpha_left/axis_e
+      - cirtesub/alpha_left/axis_d
+      - cirtesub/alpha_left/axis_c
+    angular_y_joint: cirtesub/alpha_left/axis_a
+    angular_z_joint: cirtesub/alpha_left/axis_b
+    velocity_limits: [2.5, 1.0, 1.0, 1.0, 0.5]
+    dls_lambda: 0.05
+    command_timeout_sec: 0.5
 
 /cirtesub/controller/alpha_left_joint_trajectory_controller:
   ros__parameters:
