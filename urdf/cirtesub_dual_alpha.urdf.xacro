@@ -12,8 +12,8 @@
   <xacro:arg name="alpha_use_fake_hardware" default="true"/>
   <xacro:arg name="alpha_left_serial_port" default=""/>
   <xacro:arg name="alpha_right_serial_port" default=""/>
-  <xacro:arg name="alpha_left_state_update_frequency" default="250"/>
-  <xacro:arg name="alpha_right_state_update_frequency" default="250"/>
+  <xacro:arg name="alpha_left_state_update_frequency" default="30"/>
+  <xacro:arg name="alpha_right_state_update_frequency" default="30"/>
   <xacro:arg name="initial_positions_file" default="initial_positions.yaml"/>
   <xacro:arg name="alpha_desired_joint_states_topic" default="/cirtesub/alpha/desired_joint_states"/>
   <xacro:arg name="alpha_joint_states_topic" default="/cirtesub/stonefish/alpha/joint_states"/>
