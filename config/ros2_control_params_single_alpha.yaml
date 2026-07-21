@@ -56,6 +56,15 @@
     alpha_left_forward_velocity_controller:
       type: forward_command_controller/ForwardCommandController
 
+    alpha_left_gripper_velocity_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    alpha_left_forward_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    alpha_left_gripper_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
     alpha_left_cartesian_velocity_controller:
       type: sura_controllers/uvms/AlphaCartesianVelocityController
 
@@ -370,12 +379,32 @@
 /cirtesub/controller/alpha_left_forward_velocity_controller:
   ros__parameters:
     joints:
-      - cirtesub/alpha_left/axis_a
       - cirtesub/alpha_left/axis_b
       - cirtesub/alpha_left/axis_c
       - cirtesub/alpha_left/axis_d
       - cirtesub/alpha_left/axis_e
     interface_name: velocity
+
+/cirtesub/controller/alpha_left_gripper_velocity_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/alpha_left/axis_a
+    interface_name: velocity
+
+/cirtesub/controller/alpha_left_forward_position_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/alpha_left/axis_b
+      - cirtesub/alpha_left/axis_c
+      - cirtesub/alpha_left/axis_d
+      - cirtesub/alpha_left/axis_e
+    interface_name: position
+
+/cirtesub/controller/alpha_left_gripper_position_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/alpha_left/axis_a
+    interface_name: position
 
 /cirtesub/controller/alpha_left_cartesian_velocity_controller:
   ros__parameters:
@@ -386,7 +415,6 @@
     end_effector_pose_topic: /cirtesub/controller/alpha_left_cartesian_velocity_controller/end_effector_pose
     end_effector_pose_publish_rate: 20.0
     joints:
-      - cirtesub/alpha_left/axis_a
       - cirtesub/alpha_left/axis_b
       - cirtesub/alpha_left/axis_c
       - cirtesub/alpha_left/axis_d
@@ -395,9 +423,9 @@
       - cirtesub/alpha_left/axis_e
       - cirtesub/alpha_left/axis_d
       - cirtesub/alpha_left/axis_c
-    angular_y_joint: cirtesub/alpha_left/axis_a
+    angular_y_joint: ""
     angular_z_joint: cirtesub/alpha_left/axis_b
-    velocity_limits: [2.5, 1.0, 1.0, 1.0, 0.5]
+    velocity_limits: [1.0, 1.0, 1.0, 0.5]
     dls_lambda: 0.05
     command_timeout_sec: 0.5
     linear_pose_hold_enabled: true
@@ -413,7 +441,6 @@
 /cirtesub/controller/alpha_left_joint_trajectory_controller:
   ros__parameters:
     joints:
-      - cirtesub/alpha_left/axis_a
       - cirtesub/alpha_left/axis_b
       - cirtesub/alpha_left/axis_c
       - cirtesub/alpha_left/axis_d

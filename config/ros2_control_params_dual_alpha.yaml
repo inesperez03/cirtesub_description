@@ -59,6 +59,24 @@
     alpha_right_forward_velocity_controller:
       type: forward_command_controller/ForwardCommandController
 
+    alpha_left_gripper_velocity_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    alpha_right_gripper_velocity_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    alpha_left_forward_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    alpha_right_forward_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    alpha_left_gripper_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
+    alpha_right_gripper_position_controller:
+      type: forward_command_controller/ForwardCommandController
+
     alpha_left_cartesian_velocity_controller:
       type: sura_controllers/uvms/AlphaCartesianVelocityController
 
@@ -238,30 +256,30 @@
     kp_x: 100.0
     ki_x: 50.0
     kd_x: 0.0
-    antiwindup_x: 10.0
+    antiwindup_x: 1.0
 
     kp_y: 100.0
     ki_y: 50.0
     kd_y: 0.0
-    antiwindup_y: 10.0
+    antiwindup_y: 1.0
 
     kp_z: 800.0
     ki_z: 400.0
     kd_z: 0.0
-    antiwindup_z: 10.0
+    antiwindup_z: 1.0
 
     kp_roll: 100.0
     ki_roll: 50.0
     kd_roll: 0.0
-    antiwindup_roll: 10.0
+    antiwindup_roll: 1.0
 
     kp_pitch: 100.0
     ki_pitch: 50.0
     kd_pitch: 0.0
-    antiwindup_pitch: 10.0
+    antiwindup_pitch: 1.0
 
-    kp_yaw: 15.0
-    ki_yaw: 8.0
+    kp_yaw: 10.0
+    ki_yaw: 2.0
     kd_yaw: 0.0
     antiwindup_yaw: 10.0
 
@@ -388,7 +406,6 @@
 /cirtesub/controller/alpha_left_forward_velocity_controller:
   ros__parameters:
     joints:
-      - cirtesub/alpha_left/axis_a
       - cirtesub/alpha_left/axis_b
       - cirtesub/alpha_left/axis_c
       - cirtesub/alpha_left/axis_d
@@ -398,12 +415,53 @@
 /cirtesub/controller/alpha_right_forward_velocity_controller:
   ros__parameters:
     joints:
-      - cirtesub/alpha_right/axis_a
       - cirtesub/alpha_right/axis_b
       - cirtesub/alpha_right/axis_c
       - cirtesub/alpha_right/axis_d
       - cirtesub/alpha_right/axis_e
     interface_name: velocity
+
+/cirtesub/controller/alpha_left_gripper_velocity_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/alpha_left/axis_a
+    interface_name: velocity
+
+/cirtesub/controller/alpha_right_gripper_velocity_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/alpha_right/axis_a
+    interface_name: velocity
+
+/cirtesub/controller/alpha_left_forward_position_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/alpha_left/axis_b
+      - cirtesub/alpha_left/axis_c
+      - cirtesub/alpha_left/axis_d
+      - cirtesub/alpha_left/axis_e
+    interface_name: position
+
+/cirtesub/controller/alpha_right_forward_position_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/alpha_right/axis_b
+      - cirtesub/alpha_right/axis_c
+      - cirtesub/alpha_right/axis_d
+      - cirtesub/alpha_right/axis_e
+    interface_name: position
+
+/cirtesub/controller/alpha_left_gripper_position_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/alpha_left/axis_a
+    interface_name: position
+
+/cirtesub/controller/alpha_right_gripper_position_controller:
+  ros__parameters:
+    joints:
+      - cirtesub/alpha_right/axis_a
+    interface_name: position
 
 /cirtesub/controller/alpha_left_cartesian_velocity_controller:
   ros__parameters:
@@ -414,7 +472,6 @@
     end_effector_pose_topic: /cirtesub/controller/alpha_left_cartesian_velocity_controller/end_effector_pose
     end_effector_pose_publish_rate: 20.0
     joints:
-      - cirtesub/alpha_left/axis_a
       - cirtesub/alpha_left/axis_b
       - cirtesub/alpha_left/axis_c
       - cirtesub/alpha_left/axis_d
@@ -423,9 +480,9 @@
       - cirtesub/alpha_left/axis_e
       - cirtesub/alpha_left/axis_d
       - cirtesub/alpha_left/axis_c
-    angular_y_joint: cirtesub/alpha_left/axis_a
+    angular_y_joint: ""
     angular_z_joint: cirtesub/alpha_left/axis_b
-    velocity_limits: [2.5, 1.0, 1.0, 1.0, 0.5]
+    velocity_limits: [1.0, 1.0, 1.0, 0.5]
     dls_lambda: 0.05
     command_timeout_sec: 0.5
     linear_pose_hold_enabled: true
@@ -447,7 +504,6 @@
     end_effector_pose_topic: /cirtesub/controller/alpha_right_cartesian_velocity_controller/end_effector_pose
     end_effector_pose_publish_rate: 20.0
     joints:
-      - cirtesub/alpha_right/axis_a
       - cirtesub/alpha_right/axis_b
       - cirtesub/alpha_right/axis_c
       - cirtesub/alpha_right/axis_d
@@ -456,9 +512,9 @@
       - cirtesub/alpha_right/axis_e
       - cirtesub/alpha_right/axis_d
       - cirtesub/alpha_right/axis_c
-    angular_y_joint: cirtesub/alpha_right/axis_a
+    angular_y_joint: ""
     angular_z_joint: cirtesub/alpha_right/axis_b
-    velocity_limits: [2.5, 1.0, 1.0, 1.0, 0.5]
+    velocity_limits: [1.0, 1.0, 1.0, 0.5]
     dls_lambda: 0.05
     command_timeout_sec: 0.5
     linear_pose_hold_enabled: true
@@ -474,7 +530,6 @@
 /cirtesub/controller/alpha_left_joint_trajectory_controller:
   ros__parameters:
     joints:
-      - cirtesub/alpha_left/axis_a
       - cirtesub/alpha_left/axis_b
       - cirtesub/alpha_left/axis_c
       - cirtesub/alpha_left/axis_d
@@ -521,7 +576,6 @@
 /cirtesub/controller/alpha_right_joint_trajectory_controller:
   ros__parameters:
     joints:
-      - cirtesub/alpha_right/axis_a
       - cirtesub/alpha_right/axis_b
       - cirtesub/alpha_right/axis_c
       - cirtesub/alpha_right/axis_d
@@ -595,10 +649,13 @@
 
     task_ids:
       - self_collision_avoidance
+      - joint_limits
+      - left_joint_trajectory
+      - right_joint_trajectory
       - base_pose
       - left_pose
       - right_pose
-      - joint_limits
+      - EndEffectors_Relative_pose
       - left_arm_nominal
       - right_arm_nominal
       - base_yaw
@@ -619,61 +676,100 @@
 
     tasks.base_pose.plugin: task_priority_kinematic_control/FramePoseTask
     tasks.base_pose.enabled: true
-    tasks.base_pose.priority: 1.0
+    tasks.base_pose.priority: 4.0
     tasks.base_pose.group: base
     tasks.base_pose.frame_id: cirtesub/base_link
     tasks.base_pose.gain: [1.0, 1.0, 1.0, 0.7, 0.7, 0.7]
 
     tasks.left_pose.plugin: task_priority_kinematic_control/FramePoseTask
     tasks.left_pose.enabled: true
-    tasks.left_pose.priority: 2.0
+    tasks.left_pose.priority: 5.0
     tasks.left_pose.group: left
     tasks.left_pose.frame_id: cirtesub/alpha_left/ee_base_link
     tasks.left_pose.gain: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
 
     tasks.right_pose.plugin: task_priority_kinematic_control/FramePoseTask
     tasks.right_pose.enabled: true
-    tasks.right_pose.priority: 3.0
+    tasks.right_pose.priority: 6.0
     tasks.right_pose.group: right
     tasks.right_pose.frame_id: cirtesub/alpha_right/ee_base_link
     tasks.right_pose.gain: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
 
+    tasks.EndEffectors_Relative_pose.plugin: task_priority_kinematic_control/EndEffectorsRelativePoseTask
+    tasks.EndEffectors_Relative_pose.enabled: false
+    tasks.EndEffectors_Relative_pose.priority: 7.0
+    tasks.EndEffectors_Relative_pose.group: bimanual
+    tasks.EndEffectors_Relative_pose.reference_frame: cirtesub/alpha_left/ee_base_link
+    tasks.EndEffectors_Relative_pose.controlled_frame: cirtesub/alpha_right/ee_base_link
+    tasks.EndEffectors_Relative_pose.gain: [0.4, 0.4, 0.4, 0.4, 0.4, 0.4]
+    tasks.EndEffectors_Relative_pose.activation: [1, 1, 1, 1, 1, 1]
+
     tasks.joint_limits.plugin: task_priority_kinematic_control/JointLimitsTask
     tasks.joint_limits.enabled: true
-    tasks.joint_limits.priority: 4.0
-    tasks.joint_limits.group: global
-    tasks.joint_limits.margin: 0.1
-    tasks.joint_limits.gain_scalar: 0.5
+    tasks.joint_limits.priority: 1.0
+    tasks.joint_limits.group: bimanual
+    tasks.joint_limits.alpha: 0.1
+    tasks.joint_limits.delta: 0.15
+    tasks.joint_limits.eps: 0.0001
+    tasks.joint_limits.gain_scalar: 1.0
     tasks.joint_limits.lower_limits: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     tasks.joint_limits.upper_limits: [6.10, 3.22, 3.49, 6.10, 6.10, 3.22, 3.49, 6.10]
 
+    tasks.left_joint_trajectory.plugin: task_priority_kinematic_control/JointTrajectoryTask
+    tasks.left_joint_trajectory.enabled: true
+    tasks.left_joint_trajectory.priority: 2.0
+    tasks.left_joint_trajectory.group: left
+    tasks.left_joint_trajectory.joint_names:
+      - cirtesub/alpha_left/axis_b
+      - cirtesub/alpha_left/axis_c
+      - cirtesub/alpha_left/axis_d
+      - cirtesub/alpha_left/axis_e
+    tasks.left_joint_trajectory.gain: [1.0, 1.0, 1.0, 1.0]
+    tasks.left_joint_trajectory.goal_tolerance: [0.05, 0.05, 0.05, 0.05]
+    tasks.left_joint_trajectory.trajectory_timeout: 0.5
+    tasks.left_joint_trajectory.hold_last_point: true
+
+    tasks.right_joint_trajectory.plugin: task_priority_kinematic_control/JointTrajectoryTask
+    tasks.right_joint_trajectory.enabled: true
+    tasks.right_joint_trajectory.priority: 3.0
+    tasks.right_joint_trajectory.group: right
+    tasks.right_joint_trajectory.joint_names:
+      - cirtesub/alpha_right/axis_b
+      - cirtesub/alpha_right/axis_c
+      - cirtesub/alpha_right/axis_d
+      - cirtesub/alpha_right/axis_e
+    tasks.right_joint_trajectory.gain: [1.0, 1.0, 1.0, 1.0]
+    tasks.right_joint_trajectory.goal_tolerance: [0.05, 0.05, 0.05, 0.05]
+    tasks.right_joint_trajectory.trajectory_timeout: 0.5
+    tasks.right_joint_trajectory.hold_last_point: true
+
     tasks.left_arm_nominal.plugin: task_priority_kinematic_control/JointNominalTask
     tasks.left_arm_nominal.enabled: true
-    tasks.left_arm_nominal.priority: 5.0
+    tasks.left_arm_nominal.priority: 8.0
     tasks.left_arm_nominal.group: left
     tasks.left_arm_nominal.joint_names:
       - cirtesub/alpha_left/axis_b
       - cirtesub/alpha_left/axis_c
       - cirtesub/alpha_left/axis_d
       - cirtesub/alpha_left/axis_e
-    tasks.left_arm_nominal.target: [1.2, 1.2, 1.0, 0.0]
+    tasks.left_arm_nominal.target: [2.5, 0.015, 0.015, 3.14]
     tasks.left_arm_nominal.gain: [0.2, 0.2, 0.2, 0.2]
 
     tasks.right_arm_nominal.plugin: task_priority_kinematic_control/JointNominalTask
     tasks.right_arm_nominal.enabled: true
-    tasks.right_arm_nominal.priority: 6.0
+    tasks.right_arm_nominal.priority: 9.0
     tasks.right_arm_nominal.group: right
     tasks.right_arm_nominal.joint_names:
       - cirtesub/alpha_right/axis_b
       - cirtesub/alpha_right/axis_c
       - cirtesub/alpha_right/axis_d
       - cirtesub/alpha_right/axis_e
-    tasks.right_arm_nominal.target: [1.2, 1.2, 1.0, 0.0]
+    tasks.right_arm_nominal.target: [2.5, 0.015, 0.015, 3.14]
     tasks.right_arm_nominal.gain: [0.2, 0.2, 0.2, 0.2]
 
     tasks.base_yaw.plugin: task_priority_kinematic_control/BaseYawTask
     tasks.base_yaw.enabled: true
-    tasks.base_yaw.priority: 7.0
+    tasks.base_yaw.priority: 10.0
     tasks.base_yaw.group: base
     tasks.base_yaw.target_yaw: 0.0
     tasks.base_yaw.gain_scalar: 0.5
