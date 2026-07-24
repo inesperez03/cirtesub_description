@@ -3,9 +3,12 @@
 
   <xacro:arg name="robot_name" default="cirtesub"/>
   <xacro:arg name="environment" default="sim"/>
-  <xacro:arg name="lookup_csv" default="config/t200_lookup.csv"/>
+  <xacro:arg name="lookup_csv" default="config/a50_lookup.csv"/>
   <xacro:arg name="stonefish_topic" default="/cirtesub/controller/thruster_setpoints_sim"/>
-  <xacro:arg name="pressure_offset_pa" default="101325.0"/>
+  <xacro:arg name="thruster_lpf_alpha" default="0.2"/>
+  <xacro:arg name="thruster_pwm_ramp_rate_us_per_s" default="250.0"/>
+  <xacro:arg name="thruster_pwm_min_us" default="1250.0"/>
+  <xacro:arg name="thruster_pwm_max_us" default="1750.0"/>
 
   <!-- TF -->
 
@@ -34,7 +37,14 @@
   <joint name="$(arg robot_name)/imu_joint" type="fixed">
     <parent link="$(arg robot_name)/base_link"/>
     <child link="$(arg robot_name)/imu_link"/>
-    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 1.57"/>
+  </joint>
+
+  <link name="$(arg robot_name)/imu_link_flu" tf_type="sensor"/>
+  <joint name="$(arg robot_name)/imu_joint_flu" type="fixed">
+    <parent link="$(arg robot_name)/imu_link"/>
+    <child link="$(arg robot_name)/imu_link_flu"/>
+    <origin xyz="0.0 0.0 0.0" rpy="3.1416 0.0 0.0"/>
   </joint>
 
   <link name="$(arg robot_name)/pressure_link" tf_type="sensor"/>
@@ -55,14 +65,14 @@
   <joint name="$(arg robot_name)/dvl_joint" type="fixed">
     <parent link="$(arg robot_name)/base_link"/>
     <child link="$(arg robot_name)/dvl_link"/>
-    <origin xyz="0.0 0.0 0.15" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.0 -0.18 0.07" rpy="0.0 0.0 -1.57"/>
   </joint>
 
   <link name="$(arg robot_name)/down_camera/camera" tf_type="sensor"/>
   <joint name="$(arg robot_name)/down_camera/camera_joint" type="fixed">
     <parent link="$(arg robot_name)/base_link"/>
     <child link="$(arg robot_name)/down_camera/camera"/>
-    <origin xyz="0.0 0.0 0.15" rpy="0.0 0.0 1.57"/>
+    <origin xyz="-0.024 0.2 0.15" rpy="0.0 0.0 1.57"/>
   </joint>
 
   <link name="$(arg robot_name)/camera_down/optical_frame" tf_type="sensor"/>
@@ -136,6 +146,10 @@
     <hardware>
       <plugin>sura_hardware_interface/ThrustersSystem</plugin>
       <param name="environment">$(arg environment)</param>
+      <param name="thruster_lpf_alpha">$(arg thruster_lpf_alpha)</param>
+      <param name="thruster_pwm_ramp_rate_us_per_s">$(arg thruster_pwm_ramp_rate_us_per_s)</param>
+      <param name="thruster_pwm_min_us">$(arg thruster_pwm_min_us)</param>
+      <param name="thruster_pwm_max_us">$(arg thruster_pwm_max_us)</param>
     </hardware>
 
     <joint name="$(arg robot_name)/Thruster_up_front">
@@ -144,12 +158,11 @@
       <param name="lookup_csv">$(arg lookup_csv)</param>
       <param name="stonefish_topic">$(arg stonefish_topic)</param>
       <param name="inverted">false</param>
-      <param name="pwm_offset">0.0</param>
-      <param name="channel">0</param>
+      <param name="pwm_offset">3.0</param>
+      <param name="channel">2</param>
+
       <param name="controller">thruster_test_controller</param>
       <param name="controller">body_force</param>
-      <param name="controller">mpc_4dof</param>
-      <param name="controller">state_observer</param>
       <param name="controller">body_velocity</param>
       <param name="controller">position_hold</param>
       <param name="controller">stabilize</param>
@@ -162,8 +175,8 @@
       <param name="lookup_csv">$(arg lookup_csv)</param>
       <param name="stonefish_topic">$(arg stonefish_topic)</param>
       <param name="inverted">false</param>
-      <param name="pwm_offset">0.0</param>
-      <param name="channel">1</param>
+      <param name="pwm_offset">8.0</param>
+      <param name="channel">5</param>
     </joint>
 
     <joint name="$(arg robot_name)/Thruster_up_left">
@@ -171,9 +184,9 @@
       <state_interface name="effort"/>
       <param name="lookup_csv">$(arg lookup_csv)</param>
       <param name="stonefish_topic">$(arg stonefish_topic)</param>
-      <param name="inverted">false</param>
-      <param name="pwm_offset">0.0</param>
-      <param name="channel">2</param>
+      <param name="inverted">true</param>
+      <param name="pwm_offset">3.0</param>
+      <param name="channel">1</param>
     </joint>
 
     <joint name="$(arg robot_name)/Thruster_up_right">
@@ -181,9 +194,9 @@
       <state_interface name="effort"/>
       <param name="lookup_csv">$(arg lookup_csv)</param>
       <param name="stonefish_topic">$(arg stonefish_topic)</param>
-      <param name="inverted">false</param>
-      <param name="pwm_offset">0.0</param>
-      <param name="channel">3</param>
+      <param name="inverted">true</param>
+      <param name="pwm_offset">3.0</param>
+      <param name="channel">4</param>
     </joint>
 
     <joint name="$(arg robot_name)/Thruster_down_backleft">
@@ -191,9 +204,9 @@
       <state_interface name="effort"/>
       <param name="lookup_csv">$(arg lookup_csv)</param>
       <param name="stonefish_topic">$(arg stonefish_topic)</param>
-      <param name="inverted">false</param>
+      <param name="inverted">true</param>
       <param name="pwm_offset">0.0</param>
-      <param name="channel">4</param>
+      <param name="channel">6</param>
     </joint>
 
     <joint name="$(arg robot_name)/Thruster_down_backright">
@@ -201,9 +214,9 @@
       <state_interface name="effort"/>
       <param name="lookup_csv">$(arg lookup_csv)</param>
       <param name="stonefish_topic">$(arg stonefish_topic)</param>
-      <param name="inverted">false</param>
-      <param name="pwm_offset">0.0</param>
-      <param name="channel">5</param>
+      <param name="inverted">true</param>
+      <param name="pwm_offset">10.0</param>
+      <param name="channel">15</param>
     </joint>
 
     <joint name="$(arg robot_name)/Thruster_down_frontleft">
@@ -213,7 +226,7 @@
       <param name="stonefish_topic">$(arg stonefish_topic)</param>
       <param name="inverted">false</param>
       <param name="pwm_offset">0.0</param>
-      <param name="channel">6</param>
+      <param name="channel">3</param>
     </joint>
 
     <joint name="$(arg robot_name)/Thruster_down_frontright">
@@ -223,7 +236,7 @@
       <param name="stonefish_topic">$(arg stonefish_topic)</param>
       <param name="inverted">false</param>
       <param name="pwm_offset">0.0</param>
-      <param name="channel">7</param>
+      <param name="channel">0</param>
     </joint>
   </ros2_control>
 
@@ -276,7 +289,6 @@
       <param name="broadcaster">pressure_broadcaster</param>
       <param name="read_rate_hz">50.0</param>
       <param name="frame_id">$(arg robot_name)/pressure_link</param>
-      <param name="pressure_offset_pa">$(arg pressure_offset_pa)</param>
       <param name="stonefish_topic">/$(arg robot_name)/stonefish/sensors/pressure</param>
       <param name="msg_type">sensor_msgs/msg/FluidPressure</param>
 
@@ -296,34 +308,58 @@
     </sensor>
 
     <sensor name="dvl_sensor">
-      <param name="interface">sura_hardware_interface/DvlInterface</param>
-      <param name="broadcaster">dvl75_velocity_broadcaster</param>
-      <param name="broadcaster">dvl75_altitude_broadcaster</param>
-      <param name="broadcaster">dvl75_gps_broadcaster</param>
-      <param name="read_rate_hz">20.0</param>
+      <param name="interface">sura_hardware_interface/DvlA50Interface</param>
+      <param name="broadcaster">dvla50_broadcaster</param>
+      <param name="broadcaster">dvla50_twist_stamped_broadcaster</param>
+      <param name="read_rate_hz">10.0</param>
       <param name="frame_id">$(arg robot_name)/dvl_link</param>
 
-      <param name="dvl_min_confidence">50.0</param>
+      <param name="dvl_ip">192.168.1.95</param>
+      <param name="dvl_port">16171</param>
       <param name="dvl_timeout_s">1.0</param>
-      <param name="sim_dvl_confidence">100.0</param>
+      <param name="sim_fom">0.0</param>
 
       <param name="stonefish_topic">/$(arg robot_name)/stonefish/sensors/dvl/twist</param>
       <param name="stonefish_altitude_topic">/$(arg robot_name)/stonefish/sensors/dvl/altitude</param>
-      <param name="stonefish_gps_topic">/$(arg robot_name)/stonefish/sensors/gps</param>
       <param name="msg_type">geometry_msgs/msg/TwistStamped</param>
 
       <state_interface name="linear_velocity.x"/>
       <state_interface name="linear_velocity.y"/>
       <state_interface name="linear_velocity.z"/>
-      <state_interface name="angular_velocity.x"/>
-      <state_interface name="angular_velocity.y"/>
-      <state_interface name="angular_velocity.z"/>
-      <state_interface name="distance_z"/>
-      <state_interface name="confidence"/>
-      <state_interface name="gps.latitude"/>
-      <state_interface name="gps.longitude"/>
-      <state_interface name="gps.altitude"/>
-      <state_interface name="gps.valid"/>
+      <state_interface name="fom"/>
+      <state_interface name="altitude"/>
+      <state_interface name="velocity_valid"/>
+      <state_interface name="status"/>
+      <state_interface name="time"/>
+      <state_interface name="format_code"/>
+
+      <state_interface name="beam0.id"/>
+      <state_interface name="beam0.velocity"/>
+      <state_interface name="beam0.distance"/>
+      <state_interface name="beam0.rssi"/>
+      <state_interface name="beam0.nsd"/>
+      <state_interface name="beam0.valid"/>
+
+      <state_interface name="beam1.id"/>
+      <state_interface name="beam1.velocity"/>
+      <state_interface name="beam1.distance"/>
+      <state_interface name="beam1.rssi"/>
+      <state_interface name="beam1.nsd"/>
+      <state_interface name="beam1.valid"/>
+
+      <state_interface name="beam2.id"/>
+      <state_interface name="beam2.velocity"/>
+      <state_interface name="beam2.distance"/>
+      <state_interface name="beam2.rssi"/>
+      <state_interface name="beam2.nsd"/>
+      <state_interface name="beam2.valid"/>
+
+      <state_interface name="beam3.id"/>
+      <state_interface name="beam3.velocity"/>
+      <state_interface name="beam3.distance"/>
+      <state_interface name="beam3.rssi"/>
+      <state_interface name="beam3.nsd"/>
+      <state_interface name="beam3.valid"/>
     </sensor>
   </ros2_control>
 

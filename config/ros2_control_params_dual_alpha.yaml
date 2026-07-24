@@ -131,6 +131,7 @@
     sensor_name: battery_sensor
     frame_id: cirtesub/base_link
     topic_name: /cirtesub/sensors/battery
+    cell_count: 6
 
 /cirtesub/controller/thruster_test_controller:
   ros__parameters:

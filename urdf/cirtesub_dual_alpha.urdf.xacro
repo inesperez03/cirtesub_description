@@ -6,6 +6,10 @@
   <xacro:arg name="lookup_csv" default="config/t200_lookup.csv"/>
   <xacro:arg name="stonefish_topic" default="/cirtesub/controller/thruster_setpoints_sim"/>
   <xacro:arg name="pressure_offset_pa" default="101325.0"/>
+  <xacro:arg name="thruster_lpf_alpha" default="1.0"/>
+  <xacro:arg name="thruster_pwm_ramp_rate_us_per_s" default="0.0"/>
+  <xacro:arg name="thruster_pwm_min_us" default="1100.0"/>
+  <xacro:arg name="thruster_pwm_max_us" default="1900.0"/>
 
   <xacro:arg name="arms" default="dual"/>
   <xacro:arg name="use_sim" default="true"/>
@@ -178,6 +182,10 @@
     <hardware>
       <plugin>sura_hardware_interface/ThrustersSystem</plugin>
       <param name="environment">$(arg environment)</param>
+      <param name="thruster_lpf_alpha">$(arg thruster_lpf_alpha)</param>
+      <param name="thruster_pwm_ramp_rate_us_per_s">$(arg thruster_pwm_ramp_rate_us_per_s)</param>
+      <param name="thruster_pwm_min_us">$(arg thruster_pwm_min_us)</param>
+      <param name="thruster_pwm_max_us">$(arg thruster_pwm_max_us)</param>
     </hardware>
 
     <!-- Keep the same thruster order used by Stonefish. -->

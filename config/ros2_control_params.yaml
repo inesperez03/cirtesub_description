@@ -15,14 +15,11 @@
     pressure_broadcaster:
       type: sura_sensors/PressureBroadcaster
 
-    dvl75_velocity_broadcaster:
-      type: sura_sensors/DvlVelBroadcaster
+    dvla50_broadcaster:
+      type: sura_sensors/DvlA50Broadcaster
 
-    dvl75_altitude_broadcaster:
-      type: sura_sensors/Dvl75AltitudeBroadcaster
-
-    dvl75_gps_broadcaster:
-      type: sura_sensors/Dvl75GpsBroadcaster
+    dvla50_twist_stamped_broadcaster:
+      type: sura_sensors/DvlA50TwistStampedBroadcaster
 
     battery_broadcaster:
       type: sura_sensors/BatteryBroadcaster
@@ -54,52 +51,42 @@
 /cirtesub/controller/imu_broadcaster:
   ros__parameters:
     sensor_name: imu_sensor
-    frame_id: cirtesub/IMU
-    topic_name: /cirtesub/sensors/imu
+    frame_id: cirtesub/imu_link
+    # topic_name: /cirtesub/sensors/imu
+    topic_name: /cirtesub/controller/imu_broadcaster/imu
 
 /cirtesub/controller/magnetometer_broadcaster:
   ros__parameters:
     sensor_name: magnetometer_sensor
-    frame_id: cirtesub/IMU
-    topic_name: /cirtesub/sensors/magnetometer
+    frame_id: cirtesub/imu_link
+    # topic_name: /cirtesub/sensors/magnetometer
+    topic_name: /cirtesub/controller/magnetometer_broadcaster/mag
 
 /cirtesub/controller/pressure_broadcaster:
   ros__parameters:
     sensor_name: pressure_sensor
-    frame_id: cirtesub/Pressure
+    frame_id: cirtesub/presure_link
     topic_name: /cirtesub/sensors/pressure
     pressure_variance: 0.0
 
-/cirtesub/controller/dvl75_velocity_broadcaster:
+/cirtesub/controller/dvla50_broadcaster:
   ros__parameters:
     sensor_name: dvl_sensor
-    frame_id: cirtesub/DVL
+    frame_id: cirtesub/dvl_link
+    topic_name: /cirtesub/sensors/dvl/data
+
+/cirtesub/controller/dvla50_twist_stamped_broadcaster:
+  ros__parameters:
+    sensor_name: dvl_sensor
+    frame_id: cirtesub/dvl_link
     topic_name: /cirtesub/sensors/dvl/twist
-    min_linear_velocity_covariance: 0.01
-    max_linear_velocity_covariance: 999.0
-    angular_velocity_covariance: 99999.0
-
-/cirtesub/controller/dvl75_altitude_broadcaster:
-  ros__parameters:
-    sensor_name: dvl_sensor
-    frame_id: cirtesub/DVL
-    topic_name: /cirtesub/sensors/dvl/altitude
-    field_of_view: 0.785398
-    min_range: 0.05
-    max_range: 50.0
-
-/cirtesub/controller/dvl75_gps_broadcaster:
-  ros__parameters:
-    sensor_name: dvl_sensor
-    frame_id: cirtesub/GPS
-    topic_name: /cirtesub/sensors/gps
-    position_covariance: 0.0
 
 /cirtesub/controller/battery_broadcaster:
   ros__parameters:
     sensor_name: battery_sensor
     frame_id: cirtesub/base_link
     topic_name: /cirtesub/sensors/battery
+    cell_count: 6
 
 /cirtesub/controller/thruster_test_controller:
   ros__parameters:
@@ -200,35 +187,35 @@
     feedforward_topic: /cirtesub/controller/depth_hold/feedforward
     body_force_controller_name: body_force
 
-    kp_x: 100.0
-    ki_x: 50.0
+    kp_x: 10.0
+    ki_x: 5.0
     kd_x: 0.0
-    antiwindup_x: 10.0
+    antiwindup_x: 1.0
 
-    kp_y: 100.0
-    ki_y: 50.0
+    kp_y: 10.0
+    ki_y: 5.0
     kd_y: 0.0
     antiwindup_y: 10.0
 
-    kp_z: 800.0
-    ki_z: 400.0
+    kp_z: 80.0
+    ki_z: 40.0
     kd_z: 0.0
-    antiwindup_z: 10.0
+    antiwindup_z: 1.0
 
-    kp_roll: 100.0
-    ki_roll: 50.0
+    kp_roll: 10.0
+    ki_roll: 5.0
     kd_roll: 0.0
-    antiwindup_roll: 10.0
+    antiwindup_roll: 1.0
 
-    kp_pitch: 100.0
-    ki_pitch: 50.0
+    kp_pitch: 10.0
+    ki_pitch: 5.0
     kd_pitch: 0.0
-    antiwindup_pitch: 10.0
+    antiwindup_pitch: 1.0
 
-    kp_yaw: 15.0
-    ki_yaw: 8.0
+    kp_yaw: 4.0
+    ki_yaw: 1.0
     kd_yaw: 0.0
-    antiwindup_yaw: 10.0
+    antiwindup_yaw: 1.0
 
 /cirtesub/controller/position_hold:
   ros__parameters:
@@ -290,20 +277,20 @@
     feedforward_gain_yaw: 1.0
     depth_bias_force: 0.0
 
-    kp_roll: 50.0
-    ki_roll: 40.0
-    kd_roll: 40.0
-    antiwindup_roll: 10.0
+    kp_roll: -10.0
+    ki_roll: -2.0
+    kd_roll: 0.0
+    antiwindup_roll: 3.0
 
-    kp_pitch: 50.0
-    ki_pitch: 40.0
-    kd_pitch: 40.0
-    antiwindup_pitch: 10.0
+    kp_pitch: 10.0
+    ki_pitch: 2.0
+    kd_pitch: 0.0
+    antiwindup_pitch: 3.0
 
-    kp_yaw: 10.0
-    ki_yaw: 2.0
-    kd_yaw: 6.0
-    antiwindup_yaw: 10.0
+    kp_yaw: 1.0
+    ki_yaw: 1.0
+    kd_yaw: 0.0
+    antiwindup_yaw: 1.0
 
     yaw_command_threshold: 0.001
     roll_command_threshold: 0.001
@@ -326,25 +313,26 @@
     feedforward_gain_pitch: 1.0
     feedforward_gain_yaw: 1.0
 
-    kp_roll: 50.0
-    ki_roll: 40.0
-    kd_roll: 40.0
-    antiwindup_roll: 10.0
+    kp_roll: -10.0
+    ki_roll: -2.0
+    kd_roll: 0.0
+    antiwindup_roll: 3.0
 
-    kp_pitch: 50.0
-    ki_pitch: 40.0
-    kd_pitch: 40.0
-    antiwindup_pitch: 10.0
+    kp_pitch: 10.0
+    ki_pitch: 2.0
+    kd_pitch: 0.0
+    antiwindup_pitch: 3.0
 
-    kp_yaw: 10.0
-    ki_yaw: 2.0
-    kd_yaw: 6.0
-    antiwindup_yaw: 10.0
+    kp_yaw: 1.0
+    ki_yaw: 1.0
+    kd_yaw: 0.0
+    antiwindup_yaw: 1.0
 
-    kp_depth: 400.0
-    ki_depth: 100.0
-    kd_depth: 400.0
-    antiwindup_depth: 10.0
+    kp_depth: 40.0
+    ki_depth: 3.0
+    kd_depth: 40.0
+    depth_bias_force: 4.0
+    antiwindup_depth: 0.5
 
     command_threshold: 0.001
     depth_command_threshold: 0.001
