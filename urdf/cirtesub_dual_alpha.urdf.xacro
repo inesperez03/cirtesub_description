@@ -28,15 +28,15 @@
 
   <link name="$(arg robot_name)/base_link" tf_type="base">
     <visual>
-      <origin xyz="0 0 0" rpy="0 -1.57 0"/>
+      <origin xyz="0 0 0" rpy="0 3.1416 1.57"/>
       <geometry>
         <mesh
-          filename="package://cirtesub_description/meshes/cirtesubdae.dae"
+          filename="package://cirtesub_description/meshes/cirtesub_v2_alpha.dae"
           scale="1 1 1"/>
       </geometry>
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 -1.57 0"/>
+      <origin xyz="0 0 0" rpy="0 3.1416 1.57"/>
       <geometry>
         <mesh
           filename="package://cirtesub_description/meshes/cirtesubdae_colisions.dae"
@@ -160,7 +160,7 @@
     parent="$(arg robot_name)/base_link"
     prefix="$(arg robot_name)/alpha_left/"
     description_package="alpha_description">
-    <origin xyz="0.335 -0.165 0.145" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.2664 -0.2090 0.0322" rpy="0.0 0.0 0.0"/>
   </xacro:alpha_urdf>
 
   <xacro:if value="${arms == 'dual'}">
@@ -168,7 +168,7 @@
       parent="$(arg robot_name)/base_link"
       prefix="$(arg robot_name)/alpha_right/"
       description_package="alpha_description">
-      <origin xyz="0.335 0.165 0.145" rpy="0.0 0.0 0.0"/>
+      <origin xyz="0.2664 0.2136 0.0322" rpy="0.0 0.0 0.0"/>
     </xacro:alpha_urdf>
   </xacro:if>
 

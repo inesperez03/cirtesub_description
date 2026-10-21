@@ -2,7 +2,21 @@
 <robot name="cirtesub" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <xacro:arg name="robot_name" default="cirtesub"/>
+  <xacro:arg name="floating_base" default="false"/>
+  <xacro:arg name="world_frame" default="world_ned"/>
   <xacro:property name="robot" value="$(arg robot_name)"/>
+
+  <xacro:if value="$(arg floating_base)">
+    <virtual_joint name="world_joint" type="floating" parent_frame="$(arg world_frame)" child_link="${robot}/base_link"/>
+    <group name="base_alpha_left">
+      <joint name="world_joint"/>
+      <group name="alpha_left"/>
+    </group>
+    <group name="base_alpha_right">
+      <joint name="world_joint"/>
+      <group name="alpha_right"/>
+    </group>
+  </xacro:if>
 
   <group name="alpha_left">
     <link name="${robot}/alpha_left/ee_base_link"/>

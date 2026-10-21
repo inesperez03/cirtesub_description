@@ -5,9 +5,6 @@
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    alpha_joint_state_broadcaster:
-      type: sura_sensors/AlphaJointStateBroadcaster
-
     imu_broadcaster:
       type: sura_sensors/ImuBroadcaster
 
@@ -53,6 +50,16 @@
     depth_hold:
       type: sura_controllers/auv/DepthHoldController
 
+/cirtesub/alpha/controller/controller_manager:
+  ros__parameters:
+    update_rate: 100
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    alpha_joint_state_broadcaster:
+      type: sura_sensors/AlphaJointStateBroadcaster
+
     alpha_left_forward_velocity_controller:
       type: forward_command_controller/ForwardCommandController
 
@@ -77,7 +84,7 @@
     frame_id: cirtesub/IMU
     topic_name: /cirtesub/sensors/imu
 
-/cirtesub/controller/alpha_joint_state_broadcaster:
+/cirtesub/alpha/controller/alpha_joint_state_broadcaster:
   ros__parameters:
     input_topic: /cirtesub/joint_states
     output_topic: /cirtesub/alpha/joint_states
@@ -221,6 +228,7 @@
 
 /cirtesub/controller/body_velocity:
   ros__parameters:
+    setpoint_timeout: 0.5
     debug.enabled: true
     setpoint_topic: /cirtesub/controller/body_velocity/setpoint
     navigator_topic: /cirtesub/navigator/navigation
@@ -376,7 +384,7 @@
     command_threshold: 0.001
     depth_command_threshold: 0.001
 
-/cirtesub/controller/alpha_left_forward_velocity_controller:
+/cirtesub/alpha/controller/alpha_left_forward_velocity_controller:
   ros__parameters:
     joints:
       - cirtesub/alpha_left/axis_b
@@ -385,13 +393,13 @@
       - cirtesub/alpha_left/axis_e
     interface_name: velocity
 
-/cirtesub/controller/alpha_left_gripper_velocity_controller:
+/cirtesub/alpha/controller/alpha_left_gripper_velocity_controller:
   ros__parameters:
     joints:
       - cirtesub/alpha_left/axis_a
     interface_name: velocity
 
-/cirtesub/controller/alpha_left_forward_position_controller:
+/cirtesub/alpha/controller/alpha_left_forward_position_controller:
   ros__parameters:
     joints:
       - cirtesub/alpha_left/axis_b
@@ -400,19 +408,19 @@
       - cirtesub/alpha_left/axis_e
     interface_name: position
 
-/cirtesub/controller/alpha_left_gripper_position_controller:
+/cirtesub/alpha/controller/alpha_left_gripper_position_controller:
   ros__parameters:
     joints:
       - cirtesub/alpha_left/axis_a
     interface_name: position
 
-/cirtesub/controller/alpha_left_cartesian_velocity_controller:
+/cirtesub/alpha/controller/alpha_left_cartesian_velocity_controller:
   ros__parameters:
-    command_topic: /cirtesub/controller/alpha_left_cartesian_velocity_controller/twist
+    command_topic: /cirtesub/alpha/controller/alpha_left_cartesian_velocity_controller/twist
     robot_description_source_node: /robot_state_publisher_cirtesub
     base_frame: cirtesub/alpha_left/base_link
     tip_frame: cirtesub/alpha_left/standard_jaws_tool
-    end_effector_pose_topic: /cirtesub/controller/alpha_left_cartesian_velocity_controller/end_effector_pose
+    end_effector_pose_topic: /cirtesub/alpha/controller/alpha_left_cartesian_velocity_controller/end_effector_pose
     end_effector_pose_publish_rate: 20.0
     joints:
       - cirtesub/alpha_left/axis_b
@@ -438,7 +446,7 @@
     linear_command_threshold: 0.0001
     angular_command_threshold: 0.0001
 
-/cirtesub/controller/alpha_left_joint_trajectory_controller:
+/cirtesub/alpha/controller/alpha_left_joint_trajectory_controller:
   ros__parameters:
     joints:
       - cirtesub/alpha_left/axis_b

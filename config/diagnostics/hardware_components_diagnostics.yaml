@@ -5,9 +5,17 @@
     service_timeout: 2.0
     component_names:
       - cirtesub_thrusters
+    diagnostic_names:
+      - /Hardware/Thrusters
+
+/cirtesub/alpha_hardware_components_diagnostics:
+  ros__parameters:
+    list_hardware_components_service: /cirtesub/alpha/controller/controller_manager/list_hardware_components
+    publish_period: 2.0
+    service_timeout: 2.0
+    component_names:
       - cirtesub/alpha_left
       - cirtesub/alpha_right
     diagnostic_names:
-      - /Hardware/Thrusters
       - /Hardware/Left Arm
       - /Hardware/Right Arm
